@@ -48,9 +48,21 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
         self.dispatcher = dispatcher;
         
         __weak CCBRNewsViewController *weakSelf = self;
-        self.viewModel.updateCallback = ^ (NSUInteger startIndex, NSUInteger endIndex) {
+        self.viewModel.nextArticlesCallback = ^(NSUInteger startIndex, NSUInteger endIndex) {
             dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf updateUI];
                 [weakSelf insertItemsFrom:startIndex to:endIndex];
+            });
+        };
+        self.viewModel.errorCallback = ^(NSString* errorMessage) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf updateUI];
+                [weakSelf showError:errorMessage];
+            });
+        };
+        self.viewModel.updateCallback = ^ {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf updateUI];
             });
         };
     }
@@ -85,12 +97,15 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
 - (void)updateUI {
     self.collectionView.hidden = self.viewModel.collectionViewHidden;
     self.errorMessageLabel.hidden = self.viewModel.errorMessageLabelHidden;
-    [self.collectionView reloadData];
+    self.loadingIndicatorView.hidden = !self.viewModel.indicatorViewLoading;
+    if (self.viewModel.indicatorViewLoading) {
+        [self.loadingIndicatorView startAnimating];
+    } else {
+        [self.loadingIndicatorView stopAnimating];
+    }
 }
 
 - (void)insertItemsFrom:(NSUInteger)startIndex to:(NSUInteger)endIndex {
-    self.collectionView.hidden = self.viewModel.collectionViewHidden;
-    self.errorMessageLabel.hidden = self.viewModel.errorMessageLabelHidden;
     [self.collectionView performBatchUpdates:^{
         NSMutableArray* array = [[NSMutableArray alloc] init];
         for (NSUInteger i = startIndex; i <= endIndex; i++) {
@@ -99,6 +114,10 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
         
         [self.collectionView insertItemsAtIndexPaths:array];
     } completion:nil];
+}
+
+- (void)showError:(NSString*)errorMessage {
+    self.errorMessageLabel.text = errorMessage;
 }
 
 /*

@@ -20,8 +20,21 @@
         
         __weak CCBRNewsViewModel *weakSelf = self;
         self.dataSource.nextArticlesCallback = ^(NSUInteger startIndex, NSUInteger endIndex) {
+            weakSelf.hasError = NO;
+            if (weakSelf.nextArticlesCallback) {
+                weakSelf.nextArticlesCallback(startIndex, endIndex);
+            }
+        };
+        self.dataSource.nextArticlesErrorCallback = ^(NSString* errorMessage) {
+            weakSelf.hasError = YES;
+            if (weakSelf.errorCallback) {
+                weakSelf.errorCallback(errorMessage);
+            }
+        };
+        self.dataSource.updateLoading = ^(BOOL isLoading) {
+            weakSelf.isLoading = isLoading;
             if (weakSelf.updateCallback) {
-                weakSelf.updateCallback(startIndex, endIndex);
+                weakSelf.updateCallback();
             }
         };
     }
@@ -33,7 +46,11 @@
 }
 
 - (BOOL)errorMessageLabelHidden {
-    return YES;
+    return !self.hasError;
+}
+
+- (BOOL)indicatorViewLoading {
+    return self.isLoading;
 }
 
 - (NSUInteger)itemCount {
