@@ -91,4 +91,8 @@ NSUInteger const pageSize = 30;
     return self.articles[index];
 }
 
+- (void)loadMoreArticles {
+    [self loadNextArticles];
+}
+
 @end

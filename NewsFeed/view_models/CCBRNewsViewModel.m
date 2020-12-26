@@ -21,7 +21,7 @@
         __weak CCBRNewsViewModel *weakSelf = self;
         self.dataSource.nextArticlesCallback = ^(NSUInteger startIndex, NSUInteger endIndex) {
             if (weakSelf.updateCallback) {
-                weakSelf.updateCallback();
+                weakSelf.updateCallback(startIndex, endIndex);
             }
         };
     }
@@ -46,6 +46,10 @@
         return [[CCBRNewsCardViewModel alloc] initWithModel:article];
     }
     return nil;
+}
+
+- (void)loadMore {
+    [self.dataSource loadMoreArticles];
 }
 
 @end

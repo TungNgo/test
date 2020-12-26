@@ -48,9 +48,9 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
         self.dispatcher = dispatcher;
         
         __weak CCBRNewsViewController *weakSelf = self;
-        self.viewModel.updateCallback = ^{
+        self.viewModel.updateCallback = ^ (NSUInteger startIndex, NSUInteger endIndex) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [weakSelf updateUI];
+                [weakSelf insertItemsFrom:startIndex to:endIndex];
             });
         };
     }
@@ -86,6 +86,19 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
     self.collectionView.hidden = self.viewModel.collectionViewHidden;
     self.errorMessageLabel.hidden = self.viewModel.errorMessageLabelHidden;
     [self.collectionView reloadData];
+}
+
+- (void)insertItemsFrom:(NSUInteger)startIndex to:(NSUInteger)endIndex {
+    self.collectionView.hidden = self.viewModel.collectionViewHidden;
+    self.errorMessageLabel.hidden = self.viewModel.errorMessageLabelHidden;
+    [self.collectionView performBatchUpdates:^{
+        NSMutableArray* array = [[NSMutableArray alloc] init];
+        for (NSUInteger i = startIndex; i <= endIndex; i++) {
+            [array addObject: [NSIndexPath indexPathForItem:i inSection:0]];
+        }
+        
+        [self.collectionView insertItemsAtIndexPaths:array];
+    } completion:nil];
 }
 
 /*
@@ -183,6 +196,16 @@ didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     }
     
     return CGSizeMake(itemWidth, itemHeight);
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    CGFloat visibleHeight = scrollView.frame.size.height - scrollView.contentInset.top - scrollView.contentInset.bottom;
+    CGFloat y = scrollView.contentOffset.y + scrollView.contentInset.top + scrollView.contentInset.bottom;
+    CGFloat offset = 300.0;
+    CGFloat threshhold = MAX(offset, scrollView.contentSize.height - visibleHeight - offset);
+    if (y >= threshhold) {
+        [self.viewModel loadMore];
+    }
 }
 
 #pragma mark - Event Handlers
