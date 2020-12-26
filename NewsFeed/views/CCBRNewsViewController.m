@@ -12,6 +12,8 @@
 #import "CCBRNewsMediumCardView.h"
 #import "CCBRNewsSmallCardView.h"
 #import "CCBRCommands.h"
+#import "CCBREventLogger.h"
+#import "CCBRNewsCardViewModel.h"
 
 typedef enum : NSUInteger {
     NewsV2CardTypeBig,
@@ -195,8 +197,15 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
  }
  */
 
+- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSString* cardId = [[self.viewModel itemViewModelAtIndex:indexPath.row] cardId];
+    [[CCBREventLogger shared] logCardImpression:cardId];
+}
+
 - (void)collectionView:(UICollectionView *)collectionView
 didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSString* cardId = [[self.viewModel itemViewModelAtIndex:indexPath.row] cardId];
+    [[CCBREventLogger shared] logCardClick:cardId];
     [self.dispatcher showNewsWithDataSource:self.viewModel.dataSource
                                  startIndex:indexPath.row];
 }
