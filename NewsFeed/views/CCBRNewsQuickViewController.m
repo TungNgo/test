@@ -42,6 +42,18 @@ NSURL *GetBaseURL(NSURL *URL) {
     return [NSURL URLWithString:@"/" relativeToURL:URL].absoluteURL;
 }
 
+@interface HeaderDisplayItem : NSObject
+
+@property (nonatomic, strong) NSString *title;
+@property (nonatomic, strong) NSString *domain;
+@property (nonatomic, strong) UIImage *favicon;
+
+@end
+
+
+@implementation HeaderDisplayItem
+@end
+
 @interface CCBRNewsQuickViewController () <WKNavigationDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *headerView;
@@ -95,7 +107,13 @@ NSURL *GetBaseURL(NSURL *URL) {
 - (void)updateUI {
     self.titleLabel.text = self.viewModel.title;
     self.domainLabel.text = self.viewModel.domain;
-//    self.faviconView.image = self.viewModel.favicon;
+    self.faviconView.image = self.viewModel.favicon;
+}
+
+- (void)updateHeaderView:(HeaderDisplayItem *)displayItem {
+    self.titleLabel.text = displayItem.title;
+    self.domainLabel.text = displayItem.domain;
+    self.faviconView.image = displayItem.favicon;
 }
 
 - (void)buildWebView {
@@ -125,22 +143,24 @@ NSURL *GetBaseURL(NSURL *URL) {
     [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:url]]];
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
-
 - (IBAction)didTapButton:(UIButton*)sender {
     if (sender == self.moreButton) {
         // TODO: Show More menu
     } else if (sender == self.closeButton) {
         [self.dispatcher hideNews];
     }
+}
+
+- (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler
+{
+    
+    
+    if(navigationAction.navigationType == WKNavigationTypeLinkActivated)
+    {
+        [self loadUrl:navigationAction.request.URL.absoluteString];
+    }
+    
+    decisionHandler(WKNavigationActionPolicyAllow);
 }
 
 - (void)webView:(WKWebView *)webView didFailProvisionalNavigation:(WKNavigation *)navigation withError:(NSError *)error {
