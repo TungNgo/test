@@ -10,6 +10,10 @@ NS_ASSUME_NONNULL_BEGIN
                     startIndex:(NSUInteger)startIndex;
 - (void)hideNews;
 
+- (void)showSettings;
+
+- (void)hideSettings;
+
 @end
 
 NS_ASSUME_NONNULL_END
