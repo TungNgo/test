@@ -11,6 +11,12 @@
 #import "CCBRNewsArticleModel.h"
 #import "CCBRNewsCardViewModel.h"
 
+@interface CCBRNewsViewModel ()
+
+@property (nonatomic, strong) NSError *errorMsg;
+    
+@end
+
 @implementation CCBRNewsViewModel
 
 - (instancetype)initWithDataSource:(id<CCBRArticleDataSource>)dataSource {
@@ -20,8 +26,16 @@
         
         __weak CCBRNewsViewModel *weakSelf = self;
         self.dataSource.nextArticlesCallback = ^(NSUInteger startIndex, NSUInteger endIndex) {
+            weakSelf.errorMsg = nil;
             if (weakSelf.updateCallback) {
                 weakSelf.updateCallback();
+            }
+        };
+        
+        self.dataSource.errorCallback = ^(NSError *error) {
+            weakSelf.errorMsg = error;
+            if (weakSelf.errorCallback) {
+                weakSelf.errorCallback(error.description);
             }
         };
     }
@@ -33,7 +47,7 @@
 }
 
 - (BOOL)errorMessageLabelHidden {
-    return YES;
+    return self.errorMsg == nil;
 }
 
 - (NSUInteger)itemCount {
