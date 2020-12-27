@@ -7,6 +7,12 @@
 
 #import "CCBREventLogger.h"
 
+@interface CCBREventLogger () {
+    NSMutableArray<NSString *> *impressionIds;
+}
+
+@end
+
 @implementation CCBREventLogger
 
 + (instancetype)shared {
@@ -19,7 +25,10 @@
 }
 
 - (void)logCardImpression:(NSString *)cardId {
-    NSLog(@"<CardImpression> %@", cardId);
+    if (![impressionIds containsObject:cardId]) {
+        NSLog(@"<CardImpression> %@", cardId);
+    }
+    [impressionIds addObject:cardId];
 }
 
 - (void)logCardClick:(NSString *)cardId {
