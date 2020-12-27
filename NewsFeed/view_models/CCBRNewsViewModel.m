@@ -48,4 +48,8 @@
     return nil;
 }
 
+- (void)loadMore {
+    [self.dataSource loadMore];
+}
+
 @end

@@ -32,6 +32,10 @@ NSUInteger const pageSize = 30;
     [self loadNextArticles];
 }
 
+- (void)loadMore {
+    [self loadNextArticles];
+}
+
 - (void)loadNextArticles {
     if (self.loading) {
         return;

@@ -19,6 +19,8 @@
 - (CCBRNewsArticleModel*)articleAfterArticle:(CCBRNewsArticleModel*)article;
 - (CCBRNewsArticleModel*)articleAtIndex:(NSInteger)index;
 
+- (void)loadMore;
+
 @end
 
 #endif /* CCBRArticleDataSource_h */
