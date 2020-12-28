@@ -6,6 +6,7 @@
 //
 
 #import "AppDelegate.h"
+#import "CCBREventLogger.h"
 
 @interface AppDelegate ()
 
@@ -18,6 +19,10 @@
     // Override point for customization after application launch.
     
     return YES;
+}
+
+- (void)applicationWillResignActive:(UIApplication *)application {
+    [[CCBREventLogger shared] saveImpressionLogs];
 }
 
 

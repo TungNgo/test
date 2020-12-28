@@ -6,6 +6,7 @@
 //
 
 #import "SceneDelegate.h"
+#import "CCBREventLogger.h"
 
 @interface SceneDelegate ()
 
@@ -38,6 +39,7 @@
 - (void)sceneWillResignActive:(UIScene *)scene  API_AVAILABLE(ios(13.0)){
     // Called when the scene will move from an active state to an inactive state.
     // This may occur due to temporary interruptions (ex. an incoming phone call).
+    [[CCBREventLogger shared] saveImpressionLogs];
 }
 
 
