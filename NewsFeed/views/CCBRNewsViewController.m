@@ -50,9 +50,20 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
         self.dispatcher = dispatcher;
         
         __weak CCBRNewsViewController *weakSelf = self;
-        self.viewModel.updateCallback = ^{
+        self.viewModel.reloadDataCallback = ^{
             dispatch_async(dispatch_get_main_queue(), ^{
                 [weakSelf updateUI];
+            });
+        };
+        
+        self.viewModel.appendDataCallback = ^(NSUInteger startIndex, NSUInteger count) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSMutableArray *indexPaths = [NSMutableArray array];
+                for (NSInteger i = 0; i < count; i++) {
+                    [indexPaths addObject:[NSIndexPath indexPathForItem:startIndex inSection:0]];
+                }
+                
+                [weakSelf.collectionView insertItemsAtIndexPaths:indexPaths];
             });
         };
     }
