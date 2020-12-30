@@ -12,6 +12,8 @@
 #import "CCBRNewsMediumCardView.h"
 #import "CCBRNewsSmallCardView.h"
 #import "CCBRCommands.h"
+#import "CCBREventLogger.h"
+#import "CCBRNewsCardViewModel.h"
 
 typedef enum : NSUInteger {
     NewsV2CardTypeBig,
@@ -48,9 +50,20 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
         self.dispatcher = dispatcher;
         
         __weak CCBRNewsViewController *weakSelf = self;
-        self.viewModel.updateCallback = ^{
+        self.viewModel.reloadDataCallback = ^{
             dispatch_async(dispatch_get_main_queue(), ^{
                 [weakSelf updateUI];
+            });
+        };
+        
+        self.viewModel.appendDataCallback = ^(NSUInteger startIndex, NSUInteger count) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSMutableArray *indexPaths = [NSMutableArray array];
+                for (NSInteger i = 0; i < count; i++) {
+                    [indexPaths addObject:[NSIndexPath indexPathForItem:startIndex inSection:0]];
+                }
+                
+                [weakSelf.collectionView insertItemsAtIndexPaths:indexPaths];
             });
         };
     }
@@ -109,26 +122,30 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
     return self.viewModel.itemCount;
 }
 
+- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
+    [self.viewModel loadMoreItemsAtIndex:indexPath.row];
+}
+
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    
     UICollectionViewCell *cell;
+    CCBRNewsCardViewModel *itemViewModel = [self.viewModel itemViewModelAtIndex:indexPath.row];
     
     if (self.cardType == NewsV2CardTypeSmall) {
         CCBRNewsSmallCardView *smallCardView = (CCBRNewsSmallCardView *)[collectionView dequeueReusableCellWithReuseIdentifier:kCCBRNewsSmallCardView forIndexPath:indexPath];
-        CCBRNewsCardViewModel *itemViewModel = [self.viewModel itemViewModelAtIndex:indexPath.row];
         smallCardView.viewModel = itemViewModel;
         cell = smallCardView;
     } else if (self.cardType == NewsV2CardTypeMedium) {
         CCBRNewsMediumCardView *mediumCardView = (CCBRNewsMediumCardView *)[collectionView dequeueReusableCellWithReuseIdentifier:kCCBRNewsMediumCardView forIndexPath:indexPath];
-        CCBRNewsCardViewModel *itemViewModel = [self.viewModel itemViewModelAtIndex:indexPath.row];
         mediumCardView.viewModel = itemViewModel;
         cell = mediumCardView;
     } else if (self.cardType == NewsV2CardTypeBig) {
         CCBRNewsBigCardView *bigCardView = (CCBRNewsBigCardView *)[collectionView dequeueReusableCellWithReuseIdentifier:kCCBRNewsBigCardView forIndexPath:indexPath];
-        CCBRNewsCardViewModel *itemViewModel = [self.viewModel itemViewModelAtIndex:indexPath.row];
         bigCardView.viewModel = itemViewModel;
         cell = bigCardView;
     }
     
+    [[CCBREventLogger shared] logCardImpression:itemViewModel.cardId];
     return cell;
 }
 
@@ -167,6 +184,9 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
 didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     [self.dispatcher showNewsWithDataSource:self.viewModel.dataSource
                                  startIndex:indexPath.row];
+    
+    CCBRNewsCardViewModel *itemViewModel = [self.viewModel itemViewModelAtIndex:indexPath.row];
+    [[CCBREventLogger shared] logCardClick:itemViewModel.cardId];
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -189,7 +209,7 @@ didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
 
 - (IBAction)didTapButton:(UIButton *)sender {
     if (sender == self.settingsButton) {
-        // TODO: Show Settings screen
+        [self.dispatcher showSettings];
     }
 }
 

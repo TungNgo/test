@@ -11,6 +11,12 @@
 #import "CCBRNewsArticleModel.h"
 #import "CCBRNewsCardViewModel.h"
 
+@interface CCBRNewsViewModel ()
+
+@property (nonatomic, strong) NSError *errorMsg;
+    
+@end
+
 @implementation CCBRNewsViewModel
 
 - (instancetype)initWithDataSource:(id<CCBRArticleDataSource>)dataSource {
@@ -20,8 +26,24 @@
         
         __weak CCBRNewsViewModel *weakSelf = self;
         self.dataSource.nextArticlesCallback = ^(NSUInteger startIndex, NSUInteger endIndex) {
-            if (weakSelf.updateCallback) {
-                weakSelf.updateCallback();
+            weakSelf.errorMsg = nil;
+            
+            BOOL firstTimeReloadData = startIndex == 0;
+            if (firstTimeReloadData) {
+                if (weakSelf.reloadDataCallback) {
+                    weakSelf.reloadDataCallback();
+                }
+            } else {
+                if (weakSelf.appendDataCallback) {
+                    weakSelf.appendDataCallback(startIndex, endIndex - startIndex);
+                }
+            }
+        };
+        
+        self.dataSource.errorCallback = ^(NSError *error) {
+            weakSelf.errorMsg = error;
+            if (weakSelf.errorCallback) {
+                weakSelf.errorCallback(error.description);
             }
         };
     }
@@ -33,7 +55,7 @@
 }
 
 - (BOOL)errorMessageLabelHidden {
-    return YES;
+    return self.errorMsg == nil;
 }
 
 - (NSUInteger)itemCount {
@@ -46,6 +68,13 @@
         return [[CCBRNewsCardViewModel alloc] initWithModel:article];
     }
     return nil;
+}
+
+- (void)loadMoreItemsAtIndex:(NSUInteger)index {
+    BOOL shouldLoadMore = index >= self.dataSource.articleCount - 3;
+    if (shouldLoadMore) {
+        [self.dataSource loadMore];
+    }
 }
 
 @end

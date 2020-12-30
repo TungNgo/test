@@ -11,6 +11,9 @@
 #import "CCBRNewsPageViewController.h"
 #import "CCBRNewsDataStore.h"
 
+#import "CCBRSettingsViewController.h"
+#import "CCBRSettingsViewModel.h"
+
 @interface CCBRCoordinator ()
 
 @property (nonatomic, strong) UIViewController *baseViewController;
@@ -38,6 +41,18 @@
 }
 
 - (void)hideNews {
+    [self.baseViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)showSettings {
+    CCBRSettingsViewModel *viewModel = [[CCBRSettingsViewModel alloc] init];
+    CCBRSettingsViewController *viewController = [[CCBRSettingsViewController alloc] initWithViewModel:viewModel];
+    viewController.dispatcher = self;
+    
+    [self.baseViewController presentViewController:viewController animated:YES completion:nil];
+}
+
+- (void)hideSettings {
     [self.baseViewController dismissViewControllerAnimated:YES completion:nil];
 }
 

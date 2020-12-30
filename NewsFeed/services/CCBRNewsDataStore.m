@@ -32,6 +32,10 @@ NSUInteger const pageSize = 30;
     [self loadNextArticles];
 }
 
+- (void)loadMore {
+    [self loadNextArticles];
+}
+
 - (void)loadNextArticles {
     if (self.loading) {
         return;
@@ -42,11 +46,15 @@ NSUInteger const pageSize = 30;
         self.loading = NO;
         
         if (error) {
-            // TODO: Handle error
+            if (self.errorCallback) {
+                self.errorCallback(error);
+            }
         } else {
             CCBRNewsRestResponse *response = [[CCBRNewsRestResponse alloc] initWithData:data error:&error];
             if (error) {
-                // TODO: Handle error
+                if (self.errorCallback) {
+                    self.errorCallback(error);
+                }
             } else {
                 self.page = response.nextPage.integerValue;
                 NSUInteger startIndex = self.articles.count;

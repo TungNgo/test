@@ -7,6 +7,12 @@
 
 #import "CCBREventLogger.h"
 
+@interface CCBREventLogger () {
+    NSMutableSet<NSString *> *impressionIds;
+}
+
+@end
+
 @implementation CCBREventLogger
 
 + (instancetype)shared {
@@ -18,8 +24,20 @@
     return shared;
 }
 
+-(instancetype)init {
+    self = [super init];
+    if (self) {
+        impressionIds = [NSMutableSet new];
+    }
+    return self;
+}
+
 - (void)logCardImpression:(NSString *)cardId {
-    NSLog(@"<CardImpression> %@", cardId);
+    if (![impressionIds containsObject:cardId]) {
+        NSLog(@"<CardImpression> %@", cardId);
+    }
+    
+    [impressionIds addObject:cardId];
 }
 
 - (void)logCardClick:(NSString *)cardId {
