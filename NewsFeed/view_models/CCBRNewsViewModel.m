@@ -62,8 +62,11 @@
     return nil;
 }
 
-- (void)loadMore {
-    [self.dataSource loadMore];
+- (void)loadMoreItemsAtIndex:(NSUInteger)index {
+    BOOL shouldLoadMore = index >= self.dataSource.articleCount - 3;
+    if (shouldLoadMore) {
+        [self.dataSource loadMore];
+    }
 }
 
 @end

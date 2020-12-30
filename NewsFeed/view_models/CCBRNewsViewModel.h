@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSUInteger)itemCount;
 - (CCBRNewsCardViewModel *)itemViewModelAtIndex:(NSUInteger)index;
 
-- (void)loadMore;
+- (void)loadMoreItemsAtIndex:(NSUInteger)index;
 
 @end
 

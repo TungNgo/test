@@ -61,18 +61,6 @@ NSURL *GetBaseURL(NSURL *URL) {
     return [NSURL URLWithString:@"/" relativeToURL:URL].absoluteURL;
 }
 
-@interface HeaderDisplayItem : NSObject
-
-@property (nonatomic, strong) NSString *title;
-@property (nonatomic, strong) NSString *domain;
-@property (nonatomic, strong) UIImage *favicon;
-
-@end
-
-
-@implementation HeaderDisplayItem
-@end
-
 @interface CCBRNewsQuickViewController () <WKNavigationDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *headerView;
@@ -127,12 +115,6 @@ NSURL *GetBaseURL(NSURL *URL) {
     self.titleLabel.text = self.viewModel.title;
     self.domainLabel.text = self.viewModel.domain;
     self.faviconView.image = self.viewModel.favicon;
-}
-
-- (void)updateHeaderView:(HeaderDisplayItem *)displayItem {
-    self.titleLabel.text = displayItem.title;
-    self.domainLabel.text = displayItem.domain;
-    self.faviconView.image = displayItem.favicon;
 }
 
 - (void)buildWebView {
