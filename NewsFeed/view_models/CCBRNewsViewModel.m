@@ -65,8 +65,14 @@
     return nil;
 }
 
-- (void)loadMore {
-    [self.dataSource loadMoreArticles];
+- (void)scrollViewDidScrollWith:(CGFloat)height contentInsets:(UIEdgeInsets)insets contentOffset:(CGPoint)offsetPoint {
+    CGFloat visibleHeight = height - insets.top - insets.bottom;
+    CGFloat y = offsetPoint.y + insets.top + insets.bottom;
+    CGFloat offset = 300.0;
+    CGFloat threshhold = MAX(offset, height - visibleHeight - offset);
+    if (y >= threshhold) {
+        [self.dataSource loadMoreArticles];
+    }
 }
 
 @end

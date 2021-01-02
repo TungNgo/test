@@ -22,7 +22,9 @@
 {
     self = [super init];
     if (self) {
-        NSData *data = [[NSUserDefaults standardUserDefaults] objectForKey:@"cardIdsSet"];
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *filePath = [[[paths firstObject] stringByAppendingPathComponent:@"cardIds"] stringByAppendingPathExtension:@"plist"];
+        NSData *data = [NSData dataWithContentsOfFile:filePath];
         self.cardIdsSet = [NSKeyedUnarchiver unarchiveObjectWithData:data];
         if (!self.cardIdsSet) {
             self.cardIdsSet = [[NSMutableSet alloc] init];
@@ -45,7 +47,10 @@
 }
 
 - (void)saveImpressionLogs {
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *filePath = [[[paths firstObject] stringByAppendingPathComponent:@"cardIds"] stringByAppendingPathExtension:@"plist"];
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.cardIdsSet];
+    [data writeToFile:filePath atomically:YES];
     [[NSUserDefaults standardUserDefaults] setObject:data forKey:@"cardIdsSet"];
 }
 

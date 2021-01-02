@@ -6,6 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -28,8 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)indicatorViewLoading;
 - (NSUInteger)itemCount;
 - (CCBRNewsCardViewModel *)itemViewModelAtIndex:(NSUInteger)index;
-- (void)loadMore;
-
+- (void)scrollViewDidScrollWith:(CGFloat)height contentInsets:(UIEdgeInsets)insets contentOffset:(CGPoint)offsetPoint;
 @end
 
 NS_ASSUME_NONNULL_END

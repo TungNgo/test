@@ -9,6 +9,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)showNewsWithDataSource:(id<CCBRArticleDataSource>)dataSource
                     startIndex:(NSUInteger)startIndex;
 - (void)hideNews;
+- (void)showSettings;
+- (void)hideSettings;
+- (void)showMenu;
+- (void)hideMenu;
 
 @end
 

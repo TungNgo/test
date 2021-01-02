@@ -94,17 +94,13 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
           forCellWithReuseIdentifier:kCCBRNewsSmallCardView];
     
     [self updateUI];
+    [self.loadingIndicatorView startAnimating];
 }
 
 - (void)updateUI {
     self.collectionView.hidden = self.viewModel.collectionViewHidden;
     self.errorMessageLabel.hidden = self.viewModel.errorMessageLabelHidden;
     self.loadingIndicatorView.hidden = !self.viewModel.indicatorViewLoading;
-    if (self.viewModel.indicatorViewLoading) {
-        [self.loadingIndicatorView startAnimating];
-    } else {
-        [self.loadingIndicatorView stopAnimating];
-    }
 }
 
 - (void)insertItemsFrom:(NSUInteger)startIndex to:(NSUInteger)endIndex {
@@ -227,20 +223,14 @@ didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    CGFloat visibleHeight = scrollView.frame.size.height - scrollView.contentInset.top - scrollView.contentInset.bottom;
-    CGFloat y = scrollView.contentOffset.y + scrollView.contentInset.top + scrollView.contentInset.bottom;
-    CGFloat offset = 300.0;
-    CGFloat threshhold = MAX(offset, scrollView.contentSize.height - visibleHeight - offset);
-    if (y >= threshhold) {
-        [self.viewModel loadMore];
-    }
+    [self.viewModel scrollViewDidScrollWith:scrollView.frame.size.height contentInsets:scrollView.contentInset contentOffset:scrollView.contentOffset];
 }
 
 #pragma mark - Event Handlers
 
 - (IBAction)didTapButton:(UIButton *)sender {
     if (sender == self.settingsButton) {
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString] options:@{} completionHandler:nil];
+        [self.dispatcher showSettings];
     }
 }
 

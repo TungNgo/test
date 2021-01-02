@@ -137,7 +137,7 @@ NSURL *GetBaseURL(NSURL *URL) {
 
 - (IBAction)didTapButton:(UIButton*)sender {
     if (sender == self.moreButton) {
-        // TODO: Show More menu
+        [self.dispatcher showMenu];
     } else if (sender == self.closeButton) {
         [self.dispatcher hideNews];
     }
