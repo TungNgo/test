@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithModel:(CCBRNewsArticleModel *)model;
 
+- (NSString *)cardId;
 - (NSURL *)thumbnailURL;
 - (UIImage *)favicon;
 - (NSString *)sourceText;

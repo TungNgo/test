@@ -95,7 +95,7 @@ NSURL *GetBaseURL(NSURL *URL) {
 - (void)updateUI {
     self.titleLabel.text = self.viewModel.title;
     self.domainLabel.text = self.viewModel.domain;
-//    self.faviconView.image = self.viewModel.favicon;
+    self.faviconView.image = self.viewModel.favicon;
 }
 
 - (void)buildWebView {
@@ -137,7 +137,7 @@ NSURL *GetBaseURL(NSURL *URL) {
 
 - (IBAction)didTapButton:(UIButton*)sender {
     if (sender == self.moreButton) {
-        // TODO: Show More menu
+        [self.dispatcher showMenu];
     } else if (sender == self.closeButton) {
         [self.dispatcher hideNews];
     }
@@ -169,7 +169,11 @@ NSURL *GetBaseURL(NSURL *URL) {
 }
 
 - (void)tryToUpdateTheFavicon {
-    
+    NSString* baseURLString = @"http://www.google.com/s2/favicons?domain=";
+    NSString* urlString = [baseURLString stringByAppendingString:GetBaseURL(self.webView.URL).absoluteString];
+    NSURL* url = [NSURL URLWithString:urlString];
+    [UrlToFaviconUrlMap setObject:url forKey:GetBaseURL(self.webView.URL)];
+    [self.faviconView sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"ccbr_news_article_light"]];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context

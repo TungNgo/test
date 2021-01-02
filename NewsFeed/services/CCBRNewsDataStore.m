@@ -24,6 +24,13 @@ NSUInteger const pageSize = 30;
 
 @implementation CCBRNewsDataStore
 
+- (void)setLoading:(BOOL)loading {
+    _loading = loading;
+    if (self.updateLoading) {
+        self.updateLoading(loading);
+    }
+}
+
 - (void)start {
     self.articles = [[NSMutableArray alloc] init];
     self.newsRestClient = [[CCBRNewsRestClient alloc] init];
@@ -42,11 +49,15 @@ NSUInteger const pageSize = 30;
         self.loading = NO;
         
         if (error) {
-            // TODO: Handle error
+            if (self.nextArticlesErrorCallback) {
+                self.nextArticlesErrorCallback([error localizedDescription]);
+            }
         } else {
             CCBRNewsRestResponse *response = [[CCBRNewsRestResponse alloc] initWithData:data error:&error];
             if (error) {
-                // TODO: Handle error
+                if (self.nextArticlesErrorCallback) {
+                    self.nextArticlesErrorCallback([error localizedDescription]);
+                }
             } else {
                 self.page = response.nextPage.integerValue;
                 NSUInteger startIndex = self.articles.count;
@@ -89,6 +100,10 @@ NSUInteger const pageSize = 30;
     }
     
     return self.articles[index];
+}
+
+- (void)loadMoreArticles {
+    [self loadNextArticles];
 }
 
 @end

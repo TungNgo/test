@@ -16,6 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface CCBRNewsDataStore : NSObject<CCBRArticleDataSource>
 
 @property (nonatomic, copy) void (^nextArticlesCallback)(NSUInteger startIndex, NSUInteger endIndex);
+@property (nonatomic, copy) void (^nextArticlesErrorCallback)(NSString* errorMessage);
+@property (nonatomic, copy) void (^updateLoading)(BOOL isLoading);
 
 - (void)start;
 

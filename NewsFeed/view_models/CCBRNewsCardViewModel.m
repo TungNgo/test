@@ -26,6 +26,10 @@
     return self;
 }
 
+- (NSString *)cardId {
+    return self.model.newsFeedId;
+}
+
 - (NSURL *)thumbnailURL {
     return [NSURL URLWithString:self.model.imageUrl];
 }

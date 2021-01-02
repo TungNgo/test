@@ -20,6 +20,19 @@
         
         __weak CCBRNewsViewModel *weakSelf = self;
         self.dataSource.nextArticlesCallback = ^(NSUInteger startIndex, NSUInteger endIndex) {
+            weakSelf.hasError = NO;
+            if (weakSelf.nextArticlesCallback) {
+                weakSelf.nextArticlesCallback(startIndex, endIndex);
+            }
+        };
+        self.dataSource.nextArticlesErrorCallback = ^(NSString* errorMessage) {
+            weakSelf.hasError = YES;
+            if (weakSelf.errorCallback) {
+                weakSelf.errorCallback(errorMessage);
+            }
+        };
+        self.dataSource.updateLoading = ^(BOOL isLoading) {
+            weakSelf.isLoading = isLoading;
             if (weakSelf.updateCallback) {
                 weakSelf.updateCallback();
             }
@@ -33,7 +46,11 @@
 }
 
 - (BOOL)errorMessageLabelHidden {
-    return YES;
+    return !self.hasError;
+}
+
+- (BOOL)indicatorViewLoading {
+    return self.isLoading;
 }
 
 - (NSUInteger)itemCount {
@@ -46,6 +63,16 @@
         return [[CCBRNewsCardViewModel alloc] initWithModel:article];
     }
     return nil;
+}
+
+- (void)scrollViewDidScrollWith:(CGFloat)height contentInsets:(UIEdgeInsets)insets contentOffset:(CGPoint)offsetPoint {
+    CGFloat visibleHeight = height - insets.top - insets.bottom;
+    CGFloat y = offsetPoint.y + insets.top + insets.bottom;
+    CGFloat offset = 300.0;
+    CGFloat threshhold = MAX(offset, height - visibleHeight - offset);
+    if (y >= threshhold) {
+        [self.dataSource loadMoreArticles];
+    }
 }
 
 @end

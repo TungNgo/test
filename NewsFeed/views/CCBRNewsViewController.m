@@ -12,6 +12,8 @@
 #import "CCBRNewsMediumCardView.h"
 #import "CCBRNewsSmallCardView.h"
 #import "CCBRCommands.h"
+#import "CCBREventLogger.h"
+#import "CCBRNewsCardViewModel.h"
 
 typedef enum : NSUInteger {
     NewsV2CardTypeBig,
@@ -48,7 +50,19 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
         self.dispatcher = dispatcher;
         
         __weak CCBRNewsViewController *weakSelf = self;
-        self.viewModel.updateCallback = ^{
+        self.viewModel.nextArticlesCallback = ^(NSUInteger startIndex, NSUInteger endIndex) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf updateUI];
+                [weakSelf insertItemsFrom:startIndex to:endIndex];
+            });
+        };
+        self.viewModel.errorCallback = ^(NSString* errorMessage) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf updateUI];
+                [weakSelf showError:errorMessage];
+            });
+        };
+        self.viewModel.updateCallback = ^ {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [weakSelf updateUI];
             });
@@ -80,12 +94,28 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
           forCellWithReuseIdentifier:kCCBRNewsSmallCardView];
     
     [self updateUI];
+    [self.loadingIndicatorView startAnimating];
 }
 
 - (void)updateUI {
     self.collectionView.hidden = self.viewModel.collectionViewHidden;
     self.errorMessageLabel.hidden = self.viewModel.errorMessageLabelHidden;
-    [self.collectionView reloadData];
+    self.loadingIndicatorView.hidden = !self.viewModel.indicatorViewLoading;
+}
+
+- (void)insertItemsFrom:(NSUInteger)startIndex to:(NSUInteger)endIndex {
+    [self.collectionView performBatchUpdates:^{
+        NSMutableArray* array = [[NSMutableArray alloc] init];
+        for (NSUInteger i = startIndex; i <= endIndex; i++) {
+            [array addObject: [NSIndexPath indexPathForItem:i inSection:0]];
+        }
+        
+        [self.collectionView insertItemsAtIndexPaths:array];
+    } completion:nil];
+}
+
+- (void)showError:(NSString*)errorMessage {
+    self.errorMessageLabel.text = errorMessage;
 }
 
 /*
@@ -163,8 +193,15 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
  }
  */
 
+- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSString* cardId = [[self.viewModel itemViewModelAtIndex:indexPath.row] cardId];
+    [[CCBREventLogger shared] logCardImpression:cardId];
+}
+
 - (void)collectionView:(UICollectionView *)collectionView
 didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSString* cardId = [[self.viewModel itemViewModelAtIndex:indexPath.row] cardId];
+    [[CCBREventLogger shared] logCardClick:cardId];
     [self.dispatcher showNewsWithDataSource:self.viewModel.dataSource
                                  startIndex:indexPath.row];
 }
@@ -185,11 +222,15 @@ didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     return CGSizeMake(itemWidth, itemHeight);
 }
 
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    [self.viewModel scrollViewDidScrollWith:scrollView.frame.size.height contentInsets:scrollView.contentInset contentOffset:scrollView.contentOffset];
+}
+
 #pragma mark - Event Handlers
 
 - (IBAction)didTapButton:(UIButton *)sender {
     if (sender == self.settingsButton) {
-        // TODO: Show Settings screen
+        [self.dispatcher showSettings];
     }
 }
 
