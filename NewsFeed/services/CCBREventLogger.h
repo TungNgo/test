@@ -10,6 +10,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface CCBREventLogger : NSObject
+@property (nonatomic, strong) NSMutableSet *impressCardIDs;
 
 + (instancetype)shared;
 

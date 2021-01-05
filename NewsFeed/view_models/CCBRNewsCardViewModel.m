@@ -70,4 +70,8 @@
     return self.model.desc;
 }
 
+- (NSString *)cardID {
+    return self.model.newsFeedId;
+}
+
 @end
