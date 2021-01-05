@@ -32,6 +32,10 @@ NSUInteger const pageSize = 30;
     [self loadNextArticles];
 }
 
+- (void)loadMoreArticles {
+    [self loadNextArticles];
+}
+
 - (void)loadNextArticles {
     if (self.loading) {
         return;
@@ -43,17 +47,23 @@ NSUInteger const pageSize = 30;
         
         if (error) {
             // TODO: Handle error
+            if (self.nextArticlesCallback) {
+                self.nextArticlesCallback(0, 0, error);
+            }
         } else {
             CCBRNewsRestResponse *response = [[CCBRNewsRestResponse alloc] initWithData:data error:&error];
             if (error) {
                 // TODO: Handle error
+                if (self.nextArticlesCallback) {
+                    self.nextArticlesCallback(0, 0, error);
+                }
             } else {
                 self.page = response.nextPage.integerValue;
                 NSUInteger startIndex = self.articles.count;
                 NSUInteger endIndex = startIndex + response.news.count - 1;
                 [self.articles addObjectsFromArray:response.news];
                 if (self.nextArticlesCallback) {
-                    self.nextArticlesCallback(startIndex, endIndex);
+                    self.nextArticlesCallback(startIndex, endIndex, error);
                 }
             }
         }

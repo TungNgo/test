@@ -12,6 +12,7 @@
 #import "CCBRNewsMediumCardView.h"
 #import "CCBRNewsSmallCardView.h"
 #import "CCBRCommands.h"
+#import "CCBRNewsDataStore.h"
 
 typedef enum : NSUInteger {
     NewsV2CardTypeBig,
@@ -48,9 +49,10 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
         self.dispatcher = dispatcher;
         
         __weak CCBRNewsViewController *weakSelf = self;
-        self.viewModel.updateCallback = ^{
+        self.viewModel.updateCallback = ^(NSUInteger startIndex, NSUInteger endIndex) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [weakSelf updateUI];
+                [weakSelf insertItemsFrom:startIndex To:endIndex];
             });
         };
     }
@@ -84,8 +86,21 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
 
 - (void)updateUI {
     self.collectionView.hidden = self.viewModel.collectionViewHidden;
+    self.errorMessageLabel.text = self.viewModel.errorMessageLabelText;
     self.errorMessageLabel.hidden = self.viewModel.errorMessageLabelHidden;
-    [self.collectionView reloadData];
+//    [self.collectionView reloadData];
+    
+}
+
+- (void)insertItemsFrom:(NSUInteger)startIndex To:(NSUInteger)endIndex {
+    [self.collectionView performBatchUpdates:^{
+        NSMutableArray* array = [[NSMutableArray alloc] init];
+        for (NSUInteger i = startIndex; i <= endIndex; i++) {
+            [array addObject: [NSIndexPath indexPathForItem:i inSection:0]];
+        }
+
+        [self.collectionView insertItemsAtIndexPaths:array];
+    } completion:nil];
 }
 
 /*
@@ -133,6 +148,12 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
 }
 
 #pragma mark <UICollectionViewDelegate>
+
+- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.item == self.viewModel.itemCount - 10) {
+        [self.viewModel loadMore];
+    }
+}
 
 /*
  // Uncomment this method to specify if the specified item should be highlighted during tracking
@@ -190,6 +211,7 @@ didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
 - (IBAction)didTapButton:(UIButton *)sender {
     if (sender == self.settingsButton) {
         // TODO: Show Settings screen
+        [[UIApplication sharedApplication] openURL: [NSURL URLWithString:UIApplicationOpenSettingsURLString] options:@{} completionHandler:nil];
     }
 }
 

@@ -15,12 +15,14 @@ NS_ASSUME_NONNULL_BEGIN
 @interface CCBRNewsViewModel : NSObject
 
 @property(nonatomic, weak) id<CCBRArticleDataSource> dataSource;
-@property(nonatomic, copy) void (^updateCallback)(void);
+@property(nonatomic, copy) void (^updateCallback)(NSUInteger startIndex, NSUInteger endIndex);
 
 - (instancetype)initWithDataSource:(id<CCBRArticleDataSource>)dataSource;
 
+- (void)loadMore;
 - (BOOL)collectionViewHidden;
 - (BOOL)errorMessageLabelHidden;
+- (NSString*)errorMessageLabelText;
 - (NSUInteger)itemCount;
 - (CCBRNewsCardViewModel *)itemViewModelAtIndex:(NSUInteger)index;
 

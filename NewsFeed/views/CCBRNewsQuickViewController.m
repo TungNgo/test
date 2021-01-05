@@ -95,7 +95,7 @@ NSURL *GetBaseURL(NSURL *URL) {
 - (void)updateUI {
     self.titleLabel.text = self.viewModel.title;
     self.domainLabel.text = self.viewModel.domain;
-//    self.faviconView.image = self.viewModel.favicon;
+   self.faviconView.image = self.viewModel.favicon;
 }
 
 - (void)buildWebView {
@@ -162,14 +162,17 @@ NSURL *GetBaseURL(NSURL *URL) {
     
     NSURL *faviconURL = [UrlToFaviconUrlMap objectForKey:GetBaseURL(self.webView.URL)];
     if (faviconURL) {
-        
+
     } else {
         [self tryToUpdateTheFavicon];
     }
 }
 
 - (void)tryToUpdateTheFavicon {
-    
+    NSString* urlString = [GetBaseURL(self.webView.URL).absoluteString stringByAppendingString:@"favicon.ico"];
+    NSURL* url = [NSURL URLWithString:urlString];
+    [UrlToFaviconUrlMap setObject:url forKey:GetBaseURL(self.webView.URL)];
+    [self.faviconView sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"ccbr_news_article_light"]];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
