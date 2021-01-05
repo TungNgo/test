@@ -14,12 +14,16 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         shared = [[CCBREventLogger alloc] init];
+        shared.impressCardIDs = [[NSMutableSet alloc] init];
     });
     return shared;
 }
 
 - (void)logCardImpression:(NSString *)cardId {
-    NSLog(@"<CardImpression> %@", cardId);
+    if (![self.impressCardIDs containsObject:cardId]) {
+            NSLog(@"<CardImpression> %@", cardId);
+    }
+    [self.impressCardIDs addObject:cardId];
 }
 
 - (void)logCardClick:(NSString *)cardId {
