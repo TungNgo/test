@@ -24,6 +24,12 @@
                 weakSelf.updateCallback(startIndex, endIndex);
             }
         };
+        
+        self.dataSource.nextArticlesErrorCallback = ^(NSError * _Nonnull error) {
+            if (weakSelf.errorCallback) {
+                weakSelf.errorCallback(error);
+            }
+        };
     }
     return self;
 }
@@ -33,7 +39,8 @@
 }
 
 - (BOOL)errorMessageLabelHidden {
-    return YES;
+    BOOL hidden = self.dataSource.articleLoadingError == nil;
+    return hidden;
 }
 
 - (NSUInteger)itemCount {

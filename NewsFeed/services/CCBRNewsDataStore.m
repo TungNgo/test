@@ -21,6 +21,7 @@ NSUInteger const pageSize = 30;
 @property(nonatomic, assign) NSUInteger nextPage;
 @property(nonatomic, assign) BOOL isNewSesstion;
 @property(nonatomic, assign) BOOL loading;
+@property(nonatomic, strong) NSError *loadingError;
 
 @end
 
@@ -32,6 +33,7 @@ NSUInteger const pageSize = 30;
     self.page = 0;
     self.nextPage = 0;
     self.isNewSesstion = YES;
+    self.loadingError = nil;
     
     [self loadNextArticles];
 }
@@ -48,19 +50,27 @@ NSUInteger const pageSize = 30;
     }
     
     self.loading = YES;
-    self.page = self.nextPage;
-    [self.newsRestClient loadArticlesWithSessionId:@"3C9BBC6A-1C55-4527-B75D-434EEA10072D" page:self.page size:pageSize newSession:self.isNewSesstion block:^(NSData * _Nonnull data, NSError * _Nonnull error) {
+    [self.newsRestClient loadArticlesWithSessionId:@"3C9BBC6A-1C55-4527-B75D-434EEA10072D" page:self.nextPage size:pageSize newSession:self.isNewSesstion block:^(NSData * _Nonnull data, NSError * _Nonnull error) {
+        
         self.loading = NO;
         self.isNewSesstion = NO;
         
         if (error) {
-            // TODO: Handle error
+            self.loadingError = error;
+            if (self.nextArticlesErrorCallback) {
+                self.nextArticlesErrorCallback(error);
+            }
         } else {
             CCBRNewsRestResponse *response = [[CCBRNewsRestResponse alloc] initWithData:data error:&error];
             if (error) {
-                // TODO: Handle error
+                self.loadingError = error;
+                if (self.nextArticlesErrorCallback) {
+                    self.nextArticlesErrorCallback(error);
+                }
             } else {
+                self.page = self.nextPage;
                 self.nextPage = response.nextPage.integerValue;
+                self.loadingError = nil;
                 NSUInteger startIndex = self.articles.count;
                 NSUInteger endIndex = startIndex + response.news.count - 1;
                 [self.articles addObjectsFromArray:response.news];
@@ -108,6 +118,10 @@ NSUInteger const pageSize = 30;
         return true;
     }
     return false;
+}
+
+- (NSError *)articleLoadingError {
+    return self.loadingError;
 }
 
 @end

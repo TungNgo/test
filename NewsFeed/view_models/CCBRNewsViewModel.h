@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic, weak) id<CCBRArticleDataSource> dataSource;
 @property(nonatomic, copy) void (^updateCallback)(NSUInteger, NSUInteger);
+@property(nonatomic, copy) void (^errorCallback)(NSError * _Nonnull error);
 
 - (instancetype)initWithDataSource:(id<CCBRArticleDataSource>)dataSource;
 

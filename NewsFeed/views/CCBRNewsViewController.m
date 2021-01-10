@@ -53,12 +53,23 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
                 [weakSelf addMoreArticlesFromIndex:startIndex toIndex:endIndex];
             });
         };
+        
+        self.viewModel.errorCallback = ^(NSError * error){
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf updateUI];
+            });
+        };
     }
     return self;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.errorMessageLabel.text = @"Opps, something went wrong while loading the articles. Please check back in a bit.";
+    self.errorMessageLabel.textColor = [UIColor systemRedColor];
+    self.errorMessageLabel.numberOfLines = 0;
+    self.errorMessageLabel.hidden = self.viewModel.errorMessageLabelHidden;
     
 //    self.cardType = NewsV2CardTypeBig;
 //    self.cardType = NewsV2CardTypeSmall;
@@ -216,4 +227,3 @@ didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 @end
-
