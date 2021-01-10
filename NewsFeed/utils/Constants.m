@@ -8,5 +8,9 @@
 #import <Foundation/Foundation.h>
 #import "Constants.h"
 
-NSString *const CCBRNewsFeedDisplayType = @"CCBRNewsFeedDisplayType";
-NewsV2CardType const CCBRDefautlCardType = NewsV2CardTypeMedium;
+NSString *const CCBRNewsFeedDisplayType     = @"CCBRNewsFeedDisplayType";
+NewsV2CardType const CCBRDefautlCardType    = NewsV2CardTypeMedium;
+NSString *const CCBRConsoleLogFileName      = @"console.log";
+NSString *const CCBROldConsoleLogFileName   = @"console_old.log";
+NSUInteger const CCBRConsoleLogFileSize     = 50000;
+NSString *const CCBRImpressedCardIDsKey     = @"CCBRImpressedCardIDsKey";

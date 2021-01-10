@@ -13,6 +13,9 @@
 #import "CCBRNewsSmallCardView.h"
 #import "CCBRCommands.h"
 #import "Constants.h"
+#import "CCBRNewsDataStore.h"
+#import "CCBRNewsArticleModel.h"
+#import "CCBREventLogger.h"
 
 @interface CCBRNewsViewController ()<UICollectionViewDataSource, UICollectionViewDelegate>
 
@@ -207,10 +210,16 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
  }
  */
 
-- (void)collectionView:(UICollectionView *)collectionView
-didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSString* cardID = [self.viewModel.dataSource articleAtIndex:indexPath.row].newsFeedId;
+    [[CCBREventLogger shared] logCardImpression:cardID];
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     [self.dispatcher showNewsWithDataSource:self.viewModel.dataSource
                                  startIndex:indexPath.row];
+    NSString* cardID = [self.viewModel.dataSource articleAtIndex:indexPath.row].newsFeedId;
+    [[CCBREventLogger shared] logCardClick:cardID];
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
