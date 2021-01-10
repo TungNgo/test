@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		068C434D7402BAB49C44DF01 /* Pods_NewsFeed_NewsFeedUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE3262AC0D1575645B94E444 /* Pods_NewsFeed_NewsFeedUITests.framework */; };
 		4449D6FA4CEAA8794C9AF3A0 /* Pods_NewsFeed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 134BF84EC3E73312F2A7381A /* Pods_NewsFeed.framework */; };
+		AE3B291725AB301200CD2E98 /* CCBRSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AE3B291525AB301200CD2E98 /* CCBRSettingsViewController.m */; };
+		AE3B291825AB301200CD2E98 /* CCBRSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AE3B291625AB301200CD2E98 /* CCBRSettingsViewController.xib */; };
+		AE3B292125AB357B00CD2E98 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = AE3B292025AB352C00CD2E98 /* Constants.m */; };
+		AE3B292725AB3E6700CD2E98 /* CCBRSettingsViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = AE3B292625AB3E6700CD2E98 /* CCBRSettingsViewModel.m */; };
 		F195BE6BEFBCBF0C8BAA52EA /* Pods_NewsFeedTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CABF5EB5F5C408FA62FA08A8 /* Pods_NewsFeedTests.framework */; };
 		F906A00F2538253100312DE0 /* CCBRNewsBigCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = F906A00D2538253100312DE0 /* CCBRNewsBigCardView.m */; };
 		F906A0102538253100312DE0 /* CCBRNewsBigCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F906A00E2538253100312DE0 /* CCBRNewsBigCardView.xib */; };
@@ -70,6 +74,13 @@
 		410D5575692F6ED52EEE2E4C /* Pods-NewsFeed.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NewsFeed.release.xcconfig"; path = "Target Support Files/Pods-NewsFeed/Pods-NewsFeed.release.xcconfig"; sourceTree = "<group>"; };
 		6A0AFD3251DA35AA4A2D315D /* Pods-NewsFeed-NewsFeedUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NewsFeed-NewsFeedUITests.release.xcconfig"; path = "Target Support Files/Pods-NewsFeed-NewsFeedUITests/Pods-NewsFeed-NewsFeedUITests.release.xcconfig"; sourceTree = "<group>"; };
 		9594C7F3DCF875ED677E930E /* Pods-NewsFeed-NewsFeedUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NewsFeed-NewsFeedUITests.debug.xcconfig"; path = "Target Support Files/Pods-NewsFeed-NewsFeedUITests/Pods-NewsFeed-NewsFeedUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		AE3B291425AB301200CD2E98 /* CCBRSettingsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CCBRSettingsViewController.h; sourceTree = "<group>"; };
+		AE3B291525AB301200CD2E98 /* CCBRSettingsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CCBRSettingsViewController.m; sourceTree = "<group>"; };
+		AE3B291625AB301200CD2E98 /* CCBRSettingsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CCBRSettingsViewController.xib; sourceTree = "<group>"; };
+		AE3B291F25AB33E200CD2E98 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
+		AE3B292025AB352C00CD2E98 /* Constants.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
+		AE3B292525AB3E6700CD2E98 /* CCBRSettingsViewModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CCBRSettingsViewModel.h; sourceTree = "<group>"; };
+		AE3B292625AB3E6700CD2E98 /* CCBRSettingsViewModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CCBRSettingsViewModel.m; sourceTree = "<group>"; };
 		BECF21F25548B64D4A01FF62 /* Pods-NewsFeedTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NewsFeedTests.release.xcconfig"; path = "Target Support Files/Pods-NewsFeedTests/Pods-NewsFeedTests.release.xcconfig"; sourceTree = "<group>"; };
 		C8BAECF27D18DECA027679C7 /* Pods-NewsFeed.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NewsFeed.debug.xcconfig"; path = "Target Support Files/Pods-NewsFeed/Pods-NewsFeed.debug.xcconfig"; sourceTree = "<group>"; };
 		CABF5EB5F5C408FA62FA08A8 /* Pods_NewsFeedTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NewsFeedTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -204,6 +215,8 @@
 				F9DFC5C02535F6D700404DD5 /* CCBRNewsPageViewModel.m */,
 				F9DFC5B32535F0B000404DD5 /* CCBRNewsQuickViewModel.h */,
 				F9DFC5B42535F0B000404DD5 /* CCBRNewsQuickViewModel.m */,
+				AE3B292525AB3E6700CD2E98 /* CCBRSettingsViewModel.h */,
+				AE3B292625AB3E6700CD2E98 /* CCBRSettingsViewModel.m */,
 			);
 			path = view_models;
 			sourceTree = "<group>";
@@ -223,6 +236,8 @@
 				F9C795A225358B5D00D5B365 /* CCBRNewsPageViewController.m */,
 				F9EF0C002535913E00FA6153 /* CCBRNewsQuickViewController.h */,
 				F9EF0C012535913E00FA6153 /* CCBRNewsQuickViewController.m */,
+				AE3B291425AB301200CD2E98 /* CCBRSettingsViewController.h */,
+				AE3B291525AB301200CD2E98 /* CCBRSettingsViewController.m */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -249,6 +264,8 @@
 				F970437D2577DC5500C1C3C2 /* NSString+CocCoc.mm */,
 				F9390E5E25431F6600B7FF6E /* UIView+CocCoc.h */,
 				F9390E5F25431F6600B7FF6E /* UIView+CocCoc.m */,
+				AE3B291F25AB33E200CD2E98 /* Constants.h */,
+				AE3B292025AB352C00CD2E98 /* Constants.m */,
 			);
 			path = utils;
 			sourceTree = "<group>";
@@ -262,6 +279,7 @@
 				F906A016253826ED00312DE0 /* CCBRNewsSmallCardView.xib */,
 				F9C795A325358B5D00D5B365 /* CCBRNewsPageViewController.xib */,
 				F9EF0C022535913E00FA6153 /* CCBRNewsQuickViewController.xib */,
+				AE3B291625AB301200CD2E98 /* CCBRSettingsViewController.xib */,
 			);
 			path = resources;
 			sourceTree = "<group>";
@@ -460,6 +478,7 @@
 				F906A0102538253100312DE0 /* CCBRNewsBigCardView.xib in Resources */,
 				F99395192539335C00DC5F11 /* CCBRNewsMediumCardView.xib in Resources */,
 				F9EF0C042535913E00FA6153 /* CCBRNewsQuickViewController.xib in Resources */,
+				AE3B291825AB301200CD2E98 /* CCBRSettingsViewController.xib in Resources */,
 				F906A018253826ED00312DE0 /* CCBRNewsSmallCardView.xib in Resources */,
 				F9C795A525358B5D00D5B365 /* CCBRNewsPageViewController.xib in Resources */,
 				F98D22E52578C9EE00BD90E9 /* Assets.xcassets in Resources */,
@@ -598,6 +617,7 @@
 				F9DFC5B52535F0B000404DD5 /* CCBRNewsQuickViewModel.m in Sources */,
 				F9C7957F25357FD500D5B365 /* main.m in Sources */,
 				F906A017253826ED00312DE0 /* CCBRNewsSmallCardView.m in Sources */,
+				AE3B292125AB357B00CD2E98 /* Constants.m in Sources */,
 				F970437E2577DC5500C1C3C2 /* NSString+CocCoc.mm in Sources */,
 				F917A64C2578C0B000C3087E /* CCBREventLogger.m in Sources */,
 				F9DFC5BB2535F0C300404DD5 /* CCBRNewsArticleModel.m in Sources */,
@@ -608,10 +628,12 @@
 				F99395182539335C00DC5F11 /* CCBRNewsMediumCardView.m in Sources */,
 				F9704355257792EB00C1C3C2 /* CCBRNewsSourceModel.m in Sources */,
 				F970435B2577938F00C1C3C2 /* CCBRNewsCategoryModel.m in Sources */,
+				AE3B291725AB301200CD2E98 /* CCBRSettingsViewController.m in Sources */,
 				F9EF0C032535913E00FA6153 /* CCBRNewsQuickViewController.m in Sources */,
 				F97043672577D83000C1C3C2 /* CCBRCoordinator.m in Sources */,
 				F9C795A425358B5D00D5B365 /* CCBRNewsPageViewController.m in Sources */,
 				F9DFC5CB2535F99400404DD5 /* CCBRNewsDataStore.m in Sources */,
+				AE3B292725AB3E6700CD2E98 /* CCBRSettingsViewModel.m in Sources */,
 				F9C7957125357FD400D5B365 /* SceneDelegate.m in Sources */,
 				F9390E6025431F6600B7FF6E /* UIView+CocCoc.m in Sources */,
 				F90BE37725370A94006F8EB6 /* CCBRNewsViewModel.m in Sources */,
@@ -788,7 +810,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 477H9TWJ76;
+				DEVELOPMENT_TEAM = 7B2H5R4JD5;
 				INFOPLIST_FILE = NewsFeed/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

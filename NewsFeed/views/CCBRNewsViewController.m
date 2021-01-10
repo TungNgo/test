@@ -12,12 +12,7 @@
 #import "CCBRNewsMediumCardView.h"
 #import "CCBRNewsSmallCardView.h"
 #import "CCBRCommands.h"
-
-typedef enum : NSUInteger {
-    NewsV2CardTypeBig,
-    NewsV2CardTypeMedium,
-    NewsV2CardTypeSmall,
-} NewsV2CardType;
+#import "Constants.h"
 
 @interface CCBRNewsViewController ()<UICollectionViewDataSource, UICollectionViewDelegate>
 
@@ -29,8 +24,6 @@ typedef enum : NSUInteger {
 @property (weak, nonatomic) IBOutlet UIView *collectionContainerView;
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (weak, nonatomic) IBOutlet UIButton *settingsButton;
-
-@property (nonatomic, assign) NewsV2CardType cardType;
 
 @end
 
@@ -59,6 +52,12 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
                 [weakSelf updateUI];
             });
         };
+        
+        self.viewModel.displayModeChanged = ^(NewsV2CardType cardType){
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf updateUIWithCurrentDisplayMode];
+            });
+        };
     }
     return self;
 }
@@ -70,11 +69,7 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
     self.errorMessageLabel.textColor = [UIColor systemRedColor];
     self.errorMessageLabel.numberOfLines = 0;
     self.errorMessageLabel.hidden = self.viewModel.errorMessageLabelHidden;
-    
-//    self.cardType = NewsV2CardTypeBig;
-//    self.cardType = NewsV2CardTypeSmall;
-    self.cardType = NewsV2CardTypeMedium;
-    
+
     if (self.cardType == NewsV2CardTypeMedium || self.cardType == NewsV2CardTypeSmall) {
         UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *) self.collectionView.collectionViewLayout;
         layout.minimumLineSpacing = 0;
@@ -117,6 +112,22 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
         }
         [self.collectionView insertItemsAtIndexPaths:newIndexs];
     } completion:nil];
+}
+
+- (void)updateUIWithCurrentDisplayMode {
+    UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *) self.collectionView.collectionViewLayout;
+    if (self.cardType == NewsV2CardTypeMedium || self.cardType == NewsV2CardTypeSmall) {
+        layout.minimumLineSpacing = 0;
+    }
+    else {
+        layout.minimumLineSpacing = 10;
+    }
+    
+    [self.collectionView reloadData];
+}
+
+- (NewsV2CardType)cardType {
+    return self.viewModel.displayMode;
 }
 
 /*
@@ -222,7 +233,7 @@ didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
 
 - (IBAction)didTapButton:(UIButton *)sender {
     if (sender == self.settingsButton) {
-        // TODO: Show Settings screen
+        [self.dispatcher showSettings];
     }
 }
 

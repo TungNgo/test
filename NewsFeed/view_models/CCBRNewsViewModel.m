@@ -10,6 +10,13 @@
 #import "CCBRNewsDataStore.h"
 #import "CCBRNewsArticleModel.h"
 #import "CCBRNewsCardViewModel.h"
+#import "CCBRSettingsViewModel.h"
+
+@interface CCBRNewsViewModel()
+
+@property(nonatomic, assign) NewsV2CardType cardType;
+
+@end
 
 @implementation CCBRNewsViewModel
 
@@ -30,6 +37,8 @@
                 weakSelf.errorCallback(error);
             }
         };
+        
+        self.cardType = CCBRSettingsViewModel.storedCardType;
     }
     return self;
 }
@@ -61,6 +70,20 @@
     //This condition can be optimized base on the current UI states if needed
     if (index >= [self itemCount] - 1 && [self.dataSource hasNextArticles]) {
         [self.dataSource loadNextArticles];
+    }
+}
+
+- (NewsV2CardType)displayMode {
+    return _cardType;
+}
+
+- (void)setDisplayMode:(NewsV2CardType)displayMode {
+    if (self.cardType != displayMode) {
+        self.cardType = displayMode;
+        
+        if (self.displayModeChanged) {
+            self.displayModeChanged(displayMode);
+        }
     }
 }
 
