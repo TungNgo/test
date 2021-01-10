@@ -6,8 +6,8 @@
 //
 
 #import "CCBRNewsViewModel.h"
-
 #import "CCBRNewsDataSource.h"
+#import "CCBRNewsDataStore.h"
 #import "CCBRNewsArticleModel.h"
 #import "CCBRNewsCardViewModel.h"
 
@@ -21,7 +21,7 @@
         __weak CCBRNewsViewModel *weakSelf = self;
         self.dataSource.nextArticlesCallback = ^(NSUInteger startIndex, NSUInteger endIndex) {
             if (weakSelf.updateCallback) {
-                weakSelf.updateCallback();
+                weakSelf.updateCallback(startIndex, endIndex);
             }
         };
     }
@@ -46,6 +46,15 @@
         return [[CCBRNewsCardViewModel alloc] initWithModel:article];
     }
     return nil;
+}
+
+// MARK: - Handle UI reactions
+- (void)didLoadArticle:(CCBRNewsArticleModel *)article atIndex:(NSUInteger)index {
+    //Will try to load more articles if the last item on UI is dislayed and there are more items
+    //This condition can be optimized base on the current UI states if needed
+    if (index >= [self itemCount] - 1 && [self.dataSource hasNextArticles]) {
+        [self.dataSource loadNextArticles];
+    }
 }
 
 @end

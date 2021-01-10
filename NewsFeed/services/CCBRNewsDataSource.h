@@ -18,6 +18,8 @@
 - (CCBRNewsArticleModel*)articleBeforeArticle:(CCBRNewsArticleModel*)article;
 - (CCBRNewsArticleModel*)articleAfterArticle:(CCBRNewsArticleModel*)article;
 - (CCBRNewsArticleModel*)articleAtIndex:(NSInteger)index;
+- (void)loadNextArticles;
+- (BOOL)hasNextArticles;
 
 @end
 

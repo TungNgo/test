@@ -6,13 +6,10 @@
 //
 
 #import "CCBRNewsCardViewModel.h"
-
 #import "CCBRNewsArticleModel.h"
 #import "CCBRNewsSourceModel.h"
 
 @interface CCBRNewsCardViewModel ()
-
-@property(nonatomic, strong) CCBRNewsArticleModel *model;
 
 @end
 
@@ -21,7 +18,7 @@
 - (instancetype)initWithModel:(CCBRNewsArticleModel *)model {
     self = [super init];
     if (self) {
-        self.model = model;
+        _model = model;
     }
     return self;
 }
