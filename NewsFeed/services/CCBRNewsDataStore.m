@@ -16,9 +16,12 @@ NSUInteger const pageSize = 30;
 @interface CCBRNewsDataStore ()
 
 @property(nonatomic, strong) NSMutableArray *articles;
-@property(nonatomic, strong) CCBRNewsRestClient*newsRestClient;
+@property(nonatomic, strong) CCBRNewsRestClient *newsRestClient;
 @property(nonatomic, assign) NSUInteger page;
+@property(nonatomic, assign) NSUInteger nextPage;
+@property(nonatomic, assign) BOOL isNewSesstion;
 @property(nonatomic, assign) BOOL loading;
+@property(nonatomic, strong) NSError *loadingError;
 
 @end
 
@@ -28,27 +31,46 @@ NSUInteger const pageSize = 30;
     self.articles = [[NSMutableArray alloc] init];
     self.newsRestClient = [[CCBRNewsRestClient alloc] init];
     self.page = 0;
+    self.nextPage = 0;
+    self.isNewSesstion = YES;
+    self.loadingError = nil;
     
     [self loadNextArticles];
 }
 
+// MARK: - CCBRArticleDataSource
 - (void)loadNextArticles {
+    if (![self hasNextArticles]) {
+        //Consider to refresh the news feed in this case
+        return;
+    }
+    
     if (self.loading) {
         return;
     }
     
     self.loading = YES;
-    [self.newsRestClient loadArticlesWithSessionId:@"3C9BBC6A-1C55-4527-B75D-434EEA10072D" page:self.page size:pageSize newSession:YES block:^(NSData * _Nonnull data, NSError * _Nonnull error) {
+    [self.newsRestClient loadArticlesWithSessionId:@"3C9BBC6A-1C55-4527-B75D-434EEA10072D" page:self.nextPage size:pageSize newSession:self.isNewSesstion block:^(NSData * _Nonnull data, NSError * _Nonnull error) {
+        
         self.loading = NO;
+        self.isNewSesstion = NO;
         
         if (error) {
-            // TODO: Handle error
+            self.loadingError = error;
+            if (self.nextArticlesErrorCallback) {
+                self.nextArticlesErrorCallback(error);
+            }
         } else {
             CCBRNewsRestResponse *response = [[CCBRNewsRestResponse alloc] initWithData:data error:&error];
             if (error) {
-                // TODO: Handle error
+                self.loadingError = error;
+                if (self.nextArticlesErrorCallback) {
+                    self.nextArticlesErrorCallback(error);
+                }
             } else {
-                self.page = response.nextPage.integerValue;
+                self.page = self.nextPage;
+                self.nextPage = response.nextPage.integerValue;
+                self.loadingError = nil;
                 NSUInteger startIndex = self.articles.count;
                 NSUInteger endIndex = startIndex + response.news.count - 1;
                 [self.articles addObjectsFromArray:response.news];
@@ -89,6 +111,17 @@ NSUInteger const pageSize = 30;
     }
     
     return self.articles[index];
+}
+
+- (BOOL)hasNextArticles {
+    if (_isNewSesstion || _nextPage) {
+        return true;
+    }
+    return false;
+}
+
+- (NSError *)articleLoadingError {
+    return self.loadingError;
 }
 
 @end

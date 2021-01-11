@@ -6,18 +6,16 @@
 //
 
 #import "CCBRNewsViewController.h"
-
+#import "CCBRNewsCardViewModel.h"
 #import "CCBRNewsViewModel.h"
 #import "CCBRNewsBigCardView.h"
 #import "CCBRNewsMediumCardView.h"
 #import "CCBRNewsSmallCardView.h"
 #import "CCBRCommands.h"
-
-typedef enum : NSUInteger {
-    NewsV2CardTypeBig,
-    NewsV2CardTypeMedium,
-    NewsV2CardTypeSmall,
-} NewsV2CardType;
+#import "Constants.h"
+#import "CCBRNewsDataStore.h"
+#import "CCBRNewsArticleModel.h"
+#import "CCBREventLogger.h"
 
 @interface CCBRNewsViewController ()<UICollectionViewDataSource, UICollectionViewDelegate>
 
@@ -29,8 +27,6 @@ typedef enum : NSUInteger {
 @property (weak, nonatomic) IBOutlet UIView *collectionContainerView;
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (weak, nonatomic) IBOutlet UIButton *settingsButton;
-
-@property (nonatomic, assign) NewsV2CardType cardType;
 
 @end
 
@@ -48,9 +44,21 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
         self.dispatcher = dispatcher;
         
         __weak CCBRNewsViewController *weakSelf = self;
-        self.viewModel.updateCallback = ^{
+        self.viewModel.updateCallback = ^(NSUInteger startIndex, NSUInteger endIndex){
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf addMoreArticlesFromIndex:startIndex toIndex:endIndex];
+            });
+        };
+        
+        self.viewModel.errorCallback = ^(NSError * error){
             dispatch_async(dispatch_get_main_queue(), ^{
                 [weakSelf updateUI];
+            });
+        };
+        
+        self.viewModel.displayModeChanged = ^(NewsV2CardType cardType){
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf updateUIWithCurrentDisplayMode];
             });
         };
     }
@@ -60,10 +68,11 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-//    self.cardType = NewsV2CardTypeBig;
-//    self.cardType = NewsV2CardTypeSmall;
-    self.cardType = NewsV2CardTypeMedium;
-    
+    self.errorMessageLabel.text = @"Opps, something went wrong while loading the articles. Please check back in a bit.";
+    self.errorMessageLabel.textColor = [UIColor systemRedColor];
+    self.errorMessageLabel.numberOfLines = 0;
+    self.errorMessageLabel.hidden = self.viewModel.errorMessageLabelHidden;
+
     if (self.cardType == NewsV2CardTypeMedium || self.cardType == NewsV2CardTypeSmall) {
         UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *) self.collectionView.collectionViewLayout;
         layout.minimumLineSpacing = 0;
@@ -86,6 +95,42 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
     self.collectionView.hidden = self.viewModel.collectionViewHidden;
     self.errorMessageLabel.hidden = self.viewModel.errorMessageLabelHidden;
     [self.collectionView reloadData];
+}
+
+- (void)addMoreArticlesFromIndex:(NSUInteger)startIndex toIndex:(NSUInteger)endIndex  {
+    self.collectionView.hidden = self.viewModel.collectionViewHidden;
+    self.errorMessageLabel.hidden = self.viewModel.errorMessageLabelHidden;
+    
+    if (startIndex > self.viewModel.itemCount - 1) {
+        return;
+    }
+    
+    [self.collectionView performBatchUpdates:^{
+        NSMutableArray* newIndexs = [[NSMutableArray alloc] init];
+        for (NSUInteger newIndex = startIndex; newIndex <= endIndex; newIndex++) {
+            if (newIndex > self.viewModel.itemCount - 1 ) {
+                break;
+            }
+            [newIndexs addObject: [NSIndexPath indexPathForItem:newIndex inSection:0]];
+        }
+        [self.collectionView insertItemsAtIndexPaths:newIndexs];
+    } completion:nil];
+}
+
+- (void)updateUIWithCurrentDisplayMode {
+    UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *) self.collectionView.collectionViewLayout;
+    if (self.cardType == NewsV2CardTypeMedium || self.cardType == NewsV2CardTypeSmall) {
+        layout.minimumLineSpacing = 0;
+    }
+    else {
+        layout.minimumLineSpacing = 10;
+    }
+    
+    [self.collectionView reloadData];
+}
+
+- (NewsV2CardType)cardType {
+    return self.viewModel.displayMode;
 }
 
 /*
@@ -112,21 +157,23 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     UICollectionViewCell *cell;
     
+    CCBRNewsCardViewModel *itemViewModel = [self.viewModel itemViewModelAtIndex:indexPath.row];
     if (self.cardType == NewsV2CardTypeSmall) {
         CCBRNewsSmallCardView *smallCardView = (CCBRNewsSmallCardView *)[collectionView dequeueReusableCellWithReuseIdentifier:kCCBRNewsSmallCardView forIndexPath:indexPath];
-        CCBRNewsCardViewModel *itemViewModel = [self.viewModel itemViewModelAtIndex:indexPath.row];
         smallCardView.viewModel = itemViewModel;
         cell = smallCardView;
     } else if (self.cardType == NewsV2CardTypeMedium) {
         CCBRNewsMediumCardView *mediumCardView = (CCBRNewsMediumCardView *)[collectionView dequeueReusableCellWithReuseIdentifier:kCCBRNewsMediumCardView forIndexPath:indexPath];
-        CCBRNewsCardViewModel *itemViewModel = [self.viewModel itemViewModelAtIndex:indexPath.row];
         mediumCardView.viewModel = itemViewModel;
         cell = mediumCardView;
     } else if (self.cardType == NewsV2CardTypeBig) {
         CCBRNewsBigCardView *bigCardView = (CCBRNewsBigCardView *)[collectionView dequeueReusableCellWithReuseIdentifier:kCCBRNewsBigCardView forIndexPath:indexPath];
-        CCBRNewsCardViewModel *itemViewModel = [self.viewModel itemViewModelAtIndex:indexPath.row];
         bigCardView.viewModel = itemViewModel;
         cell = bigCardView;
+    }
+    
+    if (itemViewModel) {
+        [self.viewModel didLoadArticle:itemViewModel.model atIndex:indexPath.row];
     }
     
     return cell;
@@ -163,10 +210,16 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
  }
  */
 
-- (void)collectionView:(UICollectionView *)collectionView
-didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSString* cardID = [self.viewModel.dataSource articleAtIndex:indexPath.row].newsFeedId;
+    [[CCBREventLogger shared] logCardImpression:cardID];
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     [self.dispatcher showNewsWithDataSource:self.viewModel.dataSource
                                  startIndex:indexPath.row];
+    NSString* cardID = [self.viewModel.dataSource articleAtIndex:indexPath.row].newsFeedId;
+    [[CCBREventLogger shared] logCardClick:cardID];
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -189,9 +242,8 @@ didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
 
 - (IBAction)didTapButton:(UIButton *)sender {
     if (sender == self.settingsButton) {
-        // TODO: Show Settings screen
+        [self.dispatcher showSettings];
     }
 }
 
 @end
-

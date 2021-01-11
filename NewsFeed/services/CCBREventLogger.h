@@ -16,6 +16,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)logCardImpression:(NSString *)cardId;
 - (void)logCardClick:(NSString *)cardId;
 
+- (void)createANewAppLogIfNeeded;
+- (void)storeImpressedCardIDs;
+
 @end
 
 NS_ASSUME_NONNULL_END

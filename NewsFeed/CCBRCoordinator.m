@@ -10,6 +10,10 @@
 #import "CCBRNewsPageViewModel.h"
 #import "CCBRNewsPageViewController.h"
 #import "CCBRNewsDataStore.h"
+#import "CCBRNewsViewModel.h"
+
+#import "CCBRSettingsViewModel.h"
+#import "CCBRSettingsViewController.h"
 
 @interface CCBRCoordinator ()
 
@@ -19,6 +23,8 @@
 @end
 
 @implementation CCBRCoordinator
+
+@synthesize articleCollectionViewModel;
 
 - (instancetype)initWithBaseViewController:(UIViewController *)viewController {
     self = [super init];
@@ -30,7 +36,7 @@
 
 - (void)showNewsWithDataSource:(id<CCBRArticleDataSource>)dataSource
                     startIndex:(NSUInteger)startIndex {
-    CCBRNewsPageViewModel*viewModel = [[CCBRNewsPageViewModel alloc] initWithDataSource:dataSource startIndex:startIndex];
+    CCBRNewsPageViewModel *viewModel = [[CCBRNewsPageViewModel alloc] initWithDataSource:dataSource startIndex:startIndex];
     CCBRNewsPageViewController *viewController = [[CCBRNewsPageViewController alloc] initWithViewModel:viewModel];
     viewController.dispatcher = self;
     
@@ -38,6 +44,20 @@
 }
 
 - (void)hideNews {
+    [self.baseViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)showSettings {
+    CCBRSettingsViewModel *viewModel = [[CCBRSettingsViewModel alloc] init];
+    CCBRSettingsViewController *viewController = [[CCBRSettingsViewController alloc] initWithViewModel:viewModel dispatcher:self];
+    
+    [self.baseViewController presentViewController:viewController animated:YES completion:nil];
+}
+
+- (void)hideSettings {
+    if (self.articleCollectionViewModel) {
+        self.articleCollectionViewModel.displayMode = CCBRSettingsViewModel.storedCardType;
+    }
     [self.baseViewController dismissViewControllerAnimated:YES completion:nil];
 }
 

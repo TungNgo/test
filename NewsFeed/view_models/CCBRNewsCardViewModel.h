@@ -13,6 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CCBRNewsCardViewModel : NSObject
 
+@property(nonatomic, strong, readonly) CCBRNewsArticleModel *model;
+
 - (instancetype)initWithModel:(CCBRNewsArticleModel *)model;
 
 - (NSURL *)thumbnailURL;

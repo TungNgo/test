@@ -6,6 +6,8 @@
 //
 
 #import "AppDelegate.h"
+#import "Constants.h"
+#import "CCBREventLogger.h"
 
 @interface AppDelegate ()
 
@@ -15,7 +17,20 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    
+    // Redirect NSLog output to ".../Documents/console.log" file so that users can retrieve it.
+   
+    /**
+     FOR CODE REVIEW:
+     Comment this #ifndef macro to redirect the console log to write to ".../Documents/console.log" file.
+     */
+    
+//#if TARGET_IPHONE_SIMULATOR == 0
+#ifndef DEBUG
+    NSString *logPath = PathForFileName(CCBRConsoleLogFileName);
+    freopen([logPath cStringUsingEncoding:NSASCIIStringEncoding],"a+", stderr);
+#endif
+//#endif
     
     return YES;
 }
@@ -37,5 +52,16 @@
     // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
 }
 
+- (void)applicationWillEnterForeground:(UIApplication *)application {
+    [[CCBREventLogger shared] createANewAppLogIfNeeded];
+}
+
+- (void)applicationWillResignActive:(UIApplication *)application {
+    [[CCBREventLogger shared] storeImpressedCardIDs];
+}
+
+- (void)applicationWillTerminate:(UIApplication *)application {
+    [[CCBREventLogger shared] storeImpressedCardIDs];
+}
 
 @end

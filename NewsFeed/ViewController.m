@@ -19,7 +19,7 @@
 
 @property(nonatomic, strong) CCBRCoordinator *mainCoordinator;
 @property(nonatomic, strong) CCBRNewsDataStore *articleDataStore;
-@property(nonatomic, strong) CCBRNewsViewController*articleCollectionViewController;
+@property(nonatomic, strong) CCBRNewsViewController *articleCollectionViewController;
 @property(weak, nonatomic) IBOutlet UIView *articleCollectionContainerView;
 
 @end
@@ -37,8 +37,9 @@
     
     CCBRNewsViewModel *articleCollectionViewModel = [[CCBRNewsViewModel alloc] initWithDataSource:self.articleDataStore];
     self.articleCollectionViewController = [[CCBRNewsViewController alloc] initWithViewModel:articleCollectionViewModel dispatcher:self.mainCoordinator];
+    self.mainCoordinator.articleCollectionViewModel = articleCollectionViewModel;
     
-    UIView*articleCollectionView =self.articleCollectionViewController.view;
+    UIView *articleCollectionView = self.articleCollectionViewController.view;
     [self addChildViewController:self.articleCollectionViewController];
     [self.articleCollectionContainerView addSubview:articleCollectionView];
     [self.articleCollectionViewController didMoveToParentViewController:self];

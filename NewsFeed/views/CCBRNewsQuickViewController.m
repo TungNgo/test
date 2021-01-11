@@ -13,9 +13,11 @@
 #import "CCBRCommands.h"
 
 void *CCBRNewsQuickViewControllerContext;
-NSString *const kEstimatedProgressKeyPath = @"estimatedProgress";
-NSString *const kTitleKeyPath = @"title";
-NSString *const kURLKeyPath = @"URL";
+NSString *const kEstimatedProgressKeyPath   = @"estimatedProgress";
+NSString *const kTitleKeyPath               = @"title";
+NSString *const kURLKeyPath                 = @"URL";
+NSString *const kFaviIconKeyPath            = @"favicon.ico";
+NSString *const kFaviIconPlaceHolder        = @"ccbr_news_article_light";
 static NSMutableDictionary *UrlToFaviconUrlMap;
 
 UIImage *CreateGradientImage(CGSize size, NSArray<UIColor *> *colors) {
@@ -95,7 +97,7 @@ NSURL *GetBaseURL(NSURL *URL) {
 - (void)updateUI {
     self.titleLabel.text = self.viewModel.title;
     self.domainLabel.text = self.viewModel.domain;
-//    self.faviconView.image = self.viewModel.favicon;
+    self.faviconView.image = self.viewModel.favicon;
 }
 
 - (void)buildWebView {
@@ -160,16 +162,32 @@ NSURL *GetBaseURL(NSURL *URL) {
 - (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation {
     self.progressView.hidden = YES;
     
-    NSURL *faviconURL = [UrlToFaviconUrlMap objectForKey:GetBaseURL(self.webView.URL)];
+    NSURL *baseUrlString = GetBaseURL(self.webView.URL);
+    NSURL *faviconURL = [UrlToFaviconUrlMap objectForKey:baseUrlString];
     if (faviconURL) {
-        
+        [self.faviconView sd_setImageWithURL:faviconURL placeholderImage:[UIImage imageNamed:kFaviIconPlaceHolder]];
     } else {
-        [self tryToUpdateTheFavicon];
+        NSURL *rootURL = [NSURL URLWithString:self.viewModel.url];
+        NSURL* rootBaseUrlString = GetBaseURL(rootURL);
+        if ([baseUrlString.absoluteString isEqualToString:rootBaseUrlString.absoluteString]) {
+            self.faviconView.image = self.viewModel.favicon;
+        }
+        else {
+            [self tryToUpdateTheFavicon];
+        }
     }
 }
 
 - (void)tryToUpdateTheFavicon {
+    NSString* faviUrlString = [GetBaseURL(self.webView.URL).absoluteString stringByAppendingString:kFaviIconKeyPath];
+    NSURL* faviconURL = [NSURL URLWithString:faviUrlString];
     
+    if (faviconURL) {
+        //Store faviUrl globally
+        [UrlToFaviconUrlMap setObject:faviconURL forKey:GetBaseURL(self.webView.URL)];
+        
+        [self.faviconView sd_setImageWithURL:faviconURL placeholderImage:[UIImage imageNamed:kFaviIconPlaceHolder]];
+    }
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
@@ -190,7 +208,7 @@ NSURL *GetBaseURL(NSURL *URL) {
             
             NSURL *faviconURL = [UrlToFaviconUrlMap objectForKey:GetBaseURL(self.webView.URL)];
             if (faviconURL) {
-                [self.faviconView sd_setImageWithURL:faviconURL placeholderImage:[UIImage imageNamed:@"ccbr_news_article_light"]];
+                [self.faviconView sd_setImageWithURL:faviconURL placeholderImage:[UIImage imageNamed:kFaviIconPlaceHolder]];
             }
         }
     } else {
