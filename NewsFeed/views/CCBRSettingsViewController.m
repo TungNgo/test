@@ -40,18 +40,7 @@
 }
 
 - (void)updateUI {
-    self.cardType = self.viewModel.currentCardType;
-    switch (self.cardType) {
-        case NewsV2CardTypeSmall:
-            self.displayTypeSegment.selectedSegmentIndex = 2;
-            break;
-        case NewsV2CardTypeBig:
-            self.displayTypeSegment.selectedSegmentIndex = 0;
-            break;
-        default:
-            self.displayTypeSegment.selectedSegmentIndex = 1;
-            break;
-    }
+    self.displayTypeSegment.selectedSegmentIndex = self.viewModel.currentSegmentIndex;
 }
 
 // MARK: - Event Handlers

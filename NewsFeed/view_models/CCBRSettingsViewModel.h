@@ -15,8 +15,10 @@ NS_ASSUME_NONNULL_BEGIN
 + (NewsV2CardType)storedCardType;
 
 - (NewsV2CardType)currentCardType;
+- (NSUInteger)currentSegmentIndex;
 - (void)storeCardType:(NewsV2CardType)cardType;
 - (NewsV2CardType)cardTypeWithIndex:(NSUInteger)index;
+- (NSUInteger)indexWithCardType:(NewsV2CardType)cardType;
 
 @end
 

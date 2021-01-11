@@ -42,6 +42,10 @@
     return _cardType;
 }
 
+- (NSUInteger)currentSegmentIndex {
+    return [self indexWithCardType:_cardType];
+}
+
 - (void)storeCardType:(NewsV2CardType)cardType {
     self.cardType = cardType;
     [[NSUserDefaults standardUserDefaults] setInteger:self.cardType forKey:CCBRNewsFeedDisplayType];
@@ -64,6 +68,21 @@
             break;
     }
     return cardType;
+}
+
+- (NSUInteger)indexWithCardType:(NewsV2CardType)cardType {
+    NSUInteger segmentIndex = 1; //The default value is Medium
+    switch (cardType) {
+        case NewsV2CardTypeSmall:
+            segmentIndex = 2;
+            break;
+        case NewsV2CardTypeBig:
+            segmentIndex = 0;
+            break;
+        default:
+            break;
+    }
+    return segmentIndex;
 }
 
 @end
