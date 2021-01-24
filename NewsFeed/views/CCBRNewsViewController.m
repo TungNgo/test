@@ -132,6 +132,13 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
     return cell;
 }
 
+- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
+    BOOL shouldLoadMoreArticles = indexPath.row >= self.viewModel.itemCount - 5;
+    if (shouldLoadMoreArticles) {
+        [self.viewModel loadMoreArticles];
+    }
+}
+
 #pragma mark <UICollectionViewDelegate>
 
 /*
