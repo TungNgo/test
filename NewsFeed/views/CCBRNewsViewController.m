@@ -12,6 +12,9 @@
 #import "CCBRNewsMediumCardView.h"
 #import "CCBRNewsSmallCardView.h"
 #import "CCBRCommands.h"
+#import "CCBRNewsDataSource.h"
+#import "CCBRNewsArticleModel.h"
+#import "CCBREventLogger.h"
 
 typedef enum : NSUInteger {
     NewsV2CardTypeBig,
@@ -132,11 +135,13 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
         bigCardView.viewModel = itemViewModel;
         cell = bigCardView;
     }
-    
     return cell;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSString* cardId = [self.viewModel.dataSource articleAtIndex:indexPath.row].newsFeedId;
+    [[CCBREventLogger shared] logCardImpression:cardId];
+    
     BOOL shouldLoadMoreArticles = indexPath.row >= self.viewModel.itemCount - 5;
     if (shouldLoadMoreArticles) {
         [self.viewModel loadMoreArticles];
@@ -176,6 +181,9 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
 
 - (void)collectionView:(UICollectionView *)collectionView
 didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSString* cardId = [self.viewModel.dataSource articleAtIndex:indexPath.row].newsFeedId;
+    [[CCBREventLogger shared] logCardClick:cardId];
+    
     [self.dispatcher showNewsWithDataSource:self.viewModel.dataSource
                                  startIndex:indexPath.row];
 }

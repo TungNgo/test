@@ -19,7 +19,13 @@
 }
 
 - (void)logCardImpression:(NSString *)cardId {
-    NSLog(@"<CardImpression> %@", cardId);
+    NSString* impressionCardId = [NSUserDefaults.standardUserDefaults stringForKey:cardId];
+    if (impressionCardId != cardId) {
+        [NSUserDefaults.standardUserDefaults setValue:cardId forKey:cardId];
+        NSLog(@"<CardImpression> %@", cardId);
+    } else {
+        return;
+    }
 }
 
 - (void)logCardClick:(NSString *)cardId {
