@@ -12,6 +12,9 @@
 #import "CCBRNewsMediumCardView.h"
 #import "CCBRNewsSmallCardView.h"
 #import "CCBRCommands.h"
+#import "CCBRNewsDataSource.h"
+#import "CCBRNewsArticleModel.h"
+#import "CCBREventLogger.h"
 
 typedef enum : NSUInteger {
     NewsV2CardTypeBig,
@@ -53,6 +56,13 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
                 [weakSelf updateUI];
             });
         };
+        
+        self.viewModel.errorCallback = ^{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf updateUI];
+            });
+        };
+        
     }
     return self;
 }
@@ -85,18 +95,15 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
 - (void)updateUI {
     self.collectionView.hidden = self.viewModel.collectionViewHidden;
     self.errorMessageLabel.hidden = self.viewModel.errorMessageLabelHidden;
+    self.errorMessageLabel.text = self.viewModel.errorMessage;
     [self.collectionView reloadData];
 }
 
-/*
- #pragma mark - Navigation
- 
- // In a storyboard-based application, you will often want to do a little preparation before navigation
- - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
- // Get the new view controller using [segue destinationViewController].
- // Pass the selected object to the new view controller.
- }
- */
+#pragma mark - Navigation
+- (IBAction)settingAction:(id)sender {
+    [self.dispatcher showSettings];
+}
+
 
 #pragma mark <UICollectionViewDataSource>
 
@@ -128,8 +135,17 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
         bigCardView.viewModel = itemViewModel;
         cell = bigCardView;
     }
-    
     return cell;
+}
+
+- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSString* cardId = [self.viewModel.dataSource articleAtIndex:indexPath.row].newsFeedId;
+    [[CCBREventLogger shared] logCardImpression:cardId];
+    
+    BOOL shouldLoadMoreArticles = indexPath.row >= self.viewModel.itemCount - 5;
+    if (shouldLoadMoreArticles) {
+        [self.viewModel loadMoreArticles];
+    }
 }
 
 #pragma mark <UICollectionViewDelegate>
@@ -165,6 +181,9 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
 
 - (void)collectionView:(UICollectionView *)collectionView
 didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSString* cardId = [self.viewModel.dataSource articleAtIndex:indexPath.row].newsFeedId;
+    [[CCBREventLogger shared] logCardClick:cardId];
+    
     [self.dispatcher showNewsWithDataSource:self.viewModel.dataSource
                                  startIndex:indexPath.row];
 }

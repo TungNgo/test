@@ -95,7 +95,7 @@ NSURL *GetBaseURL(NSURL *URL) {
 - (void)updateUI {
     self.titleLabel.text = self.viewModel.title;
     self.domainLabel.text = self.viewModel.domain;
-//    self.faviconView.image = self.viewModel.favicon;
+    self.faviconView.image = self.viewModel.favicon;
 }
 
 - (void)buildWebView {
@@ -169,7 +169,9 @@ NSURL *GetBaseURL(NSURL *URL) {
 }
 
 - (void)tryToUpdateTheFavicon {
-    
+    NSString *faviconUrlString = [NSString stringWithFormat:@"https://www.google.com/s2/favicons?domain=%@", GetBaseURL(self.webView.URL).absoluteString];
+    NSURL *faviconUrl = [NSURL URLWithString:faviconUrlString];
+    [self.faviconView sd_setImageWithURL:faviconUrl placeholderImage:self.viewModel.favicon];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
