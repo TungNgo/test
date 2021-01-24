@@ -20,8 +20,16 @@
         
         __weak CCBRNewsViewModel *weakSelf = self;
         self.dataSource.nextArticlesCallback = ^(NSUInteger startIndex, NSUInteger endIndex) {
+            weakSelf.errorMessage = nil;
             if (weakSelf.updateCallback) {
                 weakSelf.updateCallback();
+            }
+        };
+        
+        self.dataSource.errorCallback = ^(NSError *error) {
+            weakSelf.errorMessage = error.localizedDescription;
+            if (weakSelf.errorCallback) {
+                weakSelf.errorCallback();
             }
         };
     }
@@ -33,7 +41,7 @@
 }
 
 - (BOOL)errorMessageLabelHidden {
-    return YES;
+    return self.errorMessage == nil;
 }
 
 - (NSUInteger)itemCount {

@@ -30,12 +30,6 @@
                         <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="qUy-Ft-kKN">
                             <rect key="frame" x="197" y="399" width="20" height="20"/>
                         </activityIndicatorView>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DdS-Q4-zVr">
-                            <rect key="frame" x="16" y="398.5" width="382" height="21"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                            <nil key="textColor"/>
-                            <nil key="highlightedColor"/>
-                        </label>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="k8Z-Qr-02v">
                             <rect key="frame" x="0.0" y="0.0" width="414" height="818"/>
                             <subviews>
@@ -93,6 +87,12 @@
                                 <constraint firstItem="sGT-O9-Rgv" firstAttribute="top" secondItem="k8Z-Qr-02v" secondAttribute="top" id="qnN-B6-0Rz"/>
                             </constraints>
                         </view>
+                        <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DdS-Q4-zVr">
+                            <rect key="frame" x="16" y="398.5" width="382" height="21"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
                     </subviews>
                     <constraints>
                         <constraint firstItem="k8Z-Qr-02v" firstAttribute="top" secondItem="Oj9-RS-rFQ" secondAttribute="top" id="3hF-zq-ZKr"/>

@@ -53,6 +53,13 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
                 [weakSelf updateUI];
             });
         };
+        
+        self.viewModel.errorCallback = ^{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf updateUI];
+            });
+        };
+        
     }
     return self;
 }
@@ -85,6 +92,7 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
 - (void)updateUI {
     self.collectionView.hidden = self.viewModel.collectionViewHidden;
     self.errorMessageLabel.hidden = self.viewModel.errorMessageLabelHidden;
+    self.errorMessageLabel.text = self.viewModel.errorMessage;
     [self.collectionView reloadData];
 }
 
