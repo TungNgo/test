@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		068C434D7402BAB49C44DF01 /* Pods_NewsFeed_NewsFeedUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE3262AC0D1575645B94E444 /* Pods_NewsFeed_NewsFeedUITests.framework */; };
 		4449D6FA4CEAA8794C9AF3A0 /* Pods_NewsFeed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 134BF84EC3E73312F2A7381A /* Pods_NewsFeed.framework */; };
+		71FE50D725BDC5A000CCF222 /* CCBRSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 71FE50D525BDC5A000CCF222 /* CCBRSettingViewController.m */; };
+		71FE50D825BDC5A000CCF222 /* CCBRSettingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 71FE50D625BDC5A000CCF222 /* CCBRSettingViewController.xib */; };
 		F195BE6BEFBCBF0C8BAA52EA /* Pods_NewsFeedTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CABF5EB5F5C408FA62FA08A8 /* Pods_NewsFeedTests.framework */; };
 		F906A00F2538253100312DE0 /* CCBRNewsBigCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = F906A00D2538253100312DE0 /* CCBRNewsBigCardView.m */; };
 		F906A0102538253100312DE0 /* CCBRNewsBigCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F906A00E2538253100312DE0 /* CCBRNewsBigCardView.xib */; };
@@ -69,6 +71,9 @@
 		134BF84EC3E73312F2A7381A /* Pods_NewsFeed.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NewsFeed.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		410D5575692F6ED52EEE2E4C /* Pods-NewsFeed.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NewsFeed.release.xcconfig"; path = "Target Support Files/Pods-NewsFeed/Pods-NewsFeed.release.xcconfig"; sourceTree = "<group>"; };
 		6A0AFD3251DA35AA4A2D315D /* Pods-NewsFeed-NewsFeedUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NewsFeed-NewsFeedUITests.release.xcconfig"; path = "Target Support Files/Pods-NewsFeed-NewsFeedUITests/Pods-NewsFeed-NewsFeedUITests.release.xcconfig"; sourceTree = "<group>"; };
+		71FE50D425BDC5A000CCF222 /* CCBRSettingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CCBRSettingViewController.h; sourceTree = "<group>"; };
+		71FE50D525BDC5A000CCF222 /* CCBRSettingViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CCBRSettingViewController.m; sourceTree = "<group>"; };
+		71FE50D625BDC5A000CCF222 /* CCBRSettingViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CCBRSettingViewController.xib; sourceTree = "<group>"; };
 		9594C7F3DCF875ED677E930E /* Pods-NewsFeed-NewsFeedUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NewsFeed-NewsFeedUITests.debug.xcconfig"; path = "Target Support Files/Pods-NewsFeed-NewsFeedUITests/Pods-NewsFeed-NewsFeedUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		BECF21F25548B64D4A01FF62 /* Pods-NewsFeedTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NewsFeedTests.release.xcconfig"; path = "Target Support Files/Pods-NewsFeedTests/Pods-NewsFeedTests.release.xcconfig"; sourceTree = "<group>"; };
 		C8BAECF27D18DECA027679C7 /* Pods-NewsFeed.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NewsFeed.debug.xcconfig"; path = "Target Support Files/Pods-NewsFeed/Pods-NewsFeed.debug.xcconfig"; sourceTree = "<group>"; };
@@ -223,6 +228,8 @@
 				F9C795A225358B5D00D5B365 /* CCBRNewsPageViewController.m */,
 				F9EF0C002535913E00FA6153 /* CCBRNewsQuickViewController.h */,
 				F9EF0C012535913E00FA6153 /* CCBRNewsQuickViewController.m */,
+				71FE50D425BDC5A000CCF222 /* CCBRSettingViewController.h */,
+				71FE50D525BDC5A000CCF222 /* CCBRSettingViewController.m */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -262,6 +269,7 @@
 				F906A016253826ED00312DE0 /* CCBRNewsSmallCardView.xib */,
 				F9C795A325358B5D00D5B365 /* CCBRNewsPageViewController.xib */,
 				F9EF0C022535913E00FA6153 /* CCBRNewsQuickViewController.xib */,
+				71FE50D625BDC5A000CCF222 /* CCBRSettingViewController.xib */,
 			);
 			path = resources;
 			sourceTree = "<group>";
@@ -456,6 +464,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F9C7957C25357FD500D5B365 /* LaunchScreen.storyboard in Resources */,
+				71FE50D825BDC5A000CCF222 /* CCBRSettingViewController.xib in Resources */,
 				F906A02325382ADA00312DE0 /* CCBRNewsViewController.xib in Resources */,
 				F906A0102538253100312DE0 /* CCBRNewsBigCardView.xib in Resources */,
 				F99395192539335C00DC5F11 /* CCBRNewsMediumCardView.xib in Resources */,
@@ -595,6 +604,7 @@
 				F90BE34B25369BA8006F8EB6 /* CCBRNewsRestResponse.m in Sources */,
 				F9C7957425357FD400D5B365 /* ViewController.m in Sources */,
 				F9C7956E25357FD400D5B365 /* AppDelegate.m in Sources */,
+				71FE50D725BDC5A000CCF222 /* CCBRSettingViewController.m in Sources */,
 				F9DFC5B52535F0B000404DD5 /* CCBRNewsQuickViewModel.m in Sources */,
 				F9C7957F25357FD500D5B365 /* main.m in Sources */,
 				F906A017253826ED00312DE0 /* CCBRNewsSmallCardView.m in Sources */,

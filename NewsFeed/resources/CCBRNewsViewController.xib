@@ -62,6 +62,7 @@
                                             <state key="normal" image="settings"/>
                                             <connections>
                                                 <action selector="didTapButton:" destination="-1" eventType="touchUpInside" id="nVM-pf-Uv2"/>
+                                                <action selector="settingAction:" destination="-1" eventType="touchUpInside" id="HbG-j4-nwH"/>
                                             </connections>
                                         </button>
                                     </subviews>

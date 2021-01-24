@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CCBRSettingViewController">
+            <connections>
+                <outlet property="view" destination="I5f-cS-Wlc" id="KfE-zG-mLh"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="I5f-cS-Wlc">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="K2k-8e-bgY">
+                    <rect key="frame" x="0.0" y="100" width="414" height="762"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="74K-vU-2PM">
+                    <rect key="frame" x="0.0" y="44" width="414" height="56"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Settings" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QFw-DR-FbP">
+                            <rect key="frame" x="16" y="18" width="330" height="20"/>
+                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="16"/>
+                            <color key="textColor" red="0.078431372550000003" green="0.08235294118" blue="0.08235294118" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ap1-KY-h8P">
+                            <rect key="frame" x="362" y="6" width="44" height="44"/>
+                            <constraints>
+                                <constraint firstAttribute="width" secondItem="Ap1-KY-h8P" secondAttribute="height" multiplier="1:1" id="7gC-AA-KEz"/>
+                                <constraint firstAttribute="width" constant="44" id="WlR-bJ-g9z"/>
+                            </constraints>
+                            <state key="normal" image="close"/>
+                            <connections>
+                                <action selector="settingAction:" destination="-1" eventType="touchUpInside" id="ChL-8g-xdp"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <constraints>
+                        <constraint firstItem="QFw-DR-FbP" firstAttribute="leading" secondItem="74K-vU-2PM" secondAttribute="leading" constant="16" id="5P5-uZ-EsG"/>
+                        <constraint firstAttribute="height" constant="56" id="Bny-tg-yxK"/>
+                        <constraint firstAttribute="trailing" secondItem="Ap1-KY-h8P" secondAttribute="trailing" constant="8" id="P8m-gX-bfj"/>
+                        <constraint firstItem="Ap1-KY-h8P" firstAttribute="centerY" secondItem="74K-vU-2PM" secondAttribute="centerY" id="TXu-KY-eXg"/>
+                        <constraint firstItem="QFw-DR-FbP" firstAttribute="centerY" secondItem="74K-vU-2PM" secondAttribute="centerY" id="aeA-tp-wLr"/>
+                        <constraint firstItem="Ap1-KY-h8P" firstAttribute="leading" secondItem="QFw-DR-FbP" secondAttribute="trailing" constant="16" id="fXv-cZ-U9P"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="c0D-J5-zxJ"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="c0D-J5-zxJ" firstAttribute="bottom" secondItem="K2k-8e-bgY" secondAttribute="bottom" id="0Jj-3K-OJv"/>
+                <constraint firstItem="74K-vU-2PM" firstAttribute="leading" secondItem="c0D-J5-zxJ" secondAttribute="leading" id="8ae-xk-lGX"/>
+                <constraint firstItem="c0D-J5-zxJ" firstAttribute="trailing" secondItem="K2k-8e-bgY" secondAttribute="trailing" id="SR1-Wd-1zw"/>
+                <constraint firstItem="K2k-8e-bgY" firstAttribute="top" secondItem="74K-vU-2PM" secondAttribute="bottom" id="bhj-f6-34N"/>
+                <constraint firstItem="74K-vU-2PM" firstAttribute="top" secondItem="c0D-J5-zxJ" secondAttribute="top" id="j9G-3U-o2z"/>
+                <constraint firstItem="c0D-J5-zxJ" firstAttribute="trailing" secondItem="74K-vU-2PM" secondAttribute="trailing" id="o5X-yu-VWL"/>
+                <constraint firstItem="K2k-8e-bgY" firstAttribute="leading" secondItem="c0D-J5-zxJ" secondAttribute="leading" id="yet-pA-rBi"/>
+            </constraints>
+            <point key="canvasLocation" x="-83" y="142"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="close" width="24" height="24"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
