@@ -1,22 +1,26 @@
 PODS:
   - JSONModel (1.8.0)
-  - SDWebImage (5.9.3):
-    - SDWebImage/Core (= 5.9.3)
-  - SDWebImage/Core (5.9.3)
+  - SDWebImage (5.10.4):
+    - SDWebImage/Core (= 5.10.4)
+  - SDWebImage/Core (5.10.4)
+  - SVPullToRefresh (0.4.1)
 
 DEPENDENCIES:
   - JSONModel
   - SDWebImage
+  - SVPullToRefresh
 
 SPEC REPOS:
   trunk:
     - JSONModel
     - SDWebImage
+    - SVPullToRefresh
 
 SPEC CHECKSUMS:
   JSONModel: 02ab723958366a3fd27da57ea2af2113658762e9
-  SDWebImage: a31ee8e90a97303529e03fb0c333eae0eacb88e9
+  SDWebImage: c666b97e1fa9c64b4909816a903322018f0a9c84
+  SVPullToRefresh: ba2e718695a43253d8bea6852d2960097dc15d8c
 
-PODFILE CHECKSUM: 145e871c4da9e8a323cd10287caa7bb522053c94
+PODFILE CHECKSUM: 5f236ecd0f7e660d14060e320b532a6bc72c3197
 
-COCOAPODS: 1.9.3
+COCOAPODS: 1.10.1

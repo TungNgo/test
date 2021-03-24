@@ -20,6 +20,15 @@
     return YES;
 }
 
+#pragma mark - Top viewcontrol
+
+- (UIViewController*) topMostController {
+    UIViewController *topController = [UIApplication sharedApplication].keyWindow.rootViewController;
+    while (topController.presentedViewController != nil) {
+        topController = topController.presentedViewController;
+    }
+    return topController;
+}
 
 #pragma mark - UISceneSession lifecycle
 

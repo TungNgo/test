@@ -53,6 +53,11 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
                 [weakSelf updateUI];
             });
         };
+        self.viewModel.errorCallback = ^(NSError *error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf loadDataError:error];
+            });
+        };
     }
     return self;
 }
@@ -63,6 +68,11 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
 //    self.cardType = NewsV2CardTypeBig;
 //    self.cardType = NewsV2CardTypeSmall;
     self.cardType = NewsV2CardTypeMedium;
+    
+    __weak CCBRNewsViewController *weakSelf = self;
+    [self.collectionView addInfiniteScrollingWithActionHandler:^{
+        [weakSelf.viewModel loadMore];
+    }];
     
     if (self.cardType == NewsV2CardTypeMedium || self.cardType == NewsV2CardTypeSmall) {
         UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *) self.collectionView.collectionViewLayout;
@@ -83,9 +93,41 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
 }
 
 - (void)updateUI {
+    self.loadingIndicatorView.hidden = YES;
     self.collectionView.hidden = self.viewModel.collectionViewHidden;
     self.errorMessageLabel.hidden = self.viewModel.errorMessageLabelHidden;
     [self.collectionView reloadData];
+    [self.collectionView.infiniteScrollingView stopAnimating];
+}
+
+- (void)loadDataError: (NSError*)error {
+    NSString* message = @"API errors";
+    if (![error.localizedDescription isEqualToString:@""]) {
+        message = error.localizedDescription;
+    }
+    if (self.viewModel.collectionViewHidden && !self.viewModel.errorMessageLabelHidden) {
+        self.errorMessageLabel.text = message;
+    } else {
+        [self showMessage:message];
+    }
+    self.loadingIndicatorView.hidden = YES;
+    self.collectionView.hidden = self.viewModel.collectionViewHidden;
+    self.errorMessageLabel.hidden = self.viewModel.errorMessageLabelHidden;
+    [self.collectionView.infiniteScrollingView stopAnimating];
+}
+
+- (void)showMessage: (NSString*)message {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error"
+                                                                   message:message
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *firstAction = [UIAlertAction actionWithTitle:@"Close"
+                                                          style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+        NSLog(@"You pressed button close");
+    }]; // 2
+    
+    [alert addAction:firstAction];
+    
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 /*
@@ -190,6 +232,7 @@ didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
 - (IBAction)didTapButton:(UIButton *)sender {
     if (sender == self.settingsButton) {
         // TODO: Show Settings screen
+        [self.dispatcher showSettings];
     }
 }
 

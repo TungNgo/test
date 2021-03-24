@@ -10,6 +10,8 @@
 #import "CCBRNewsPageViewModel.h"
 #import "CCBRNewsPageViewController.h"
 #import "CCBRNewsDataStore.h"
+#import "CCBRSettingsViewController.h"
+#import "AppDelegate.h"
 
 @interface CCBRCoordinator ()
 
@@ -37,8 +39,19 @@
     [self.baseViewController presentViewController:viewController animated:YES completion:nil];
 }
 
+- (void)showSettings {
+    CCBRSettingsViewModel *viewModel = [[CCBRSettingsViewModel alloc] init];
+    CCBRSettingsViewController *viewController = [[CCBRSettingsViewController alloc] initWithViewModel:viewModel];
+    viewController.dispatcher = self;
+    [[APPDELEGATE topMostController] presentViewController:viewController animated:YES completion:nil];
+}
+
 - (void)hideNews {
     [self.baseViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)dismiss {
+    [[APPDELEGATE topMostController] dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

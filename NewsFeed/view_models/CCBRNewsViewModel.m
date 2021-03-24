@@ -17,11 +17,19 @@
     self = [super init];
     if (self) {
         self.dataSource = dataSource;
+        self.isHiddenErrorMessageLabel = YES;
         
         __weak CCBRNewsViewModel *weakSelf = self;
         self.dataSource.nextArticlesCallback = ^(NSUInteger startIndex, NSUInteger endIndex) {
             if (weakSelf.updateCallback) {
+                weakSelf.isHiddenErrorMessageLabel = YES;
                 weakSelf.updateCallback();
+            }
+        };
+        self.dataSource.errorCallback = ^(NSError *error) {
+            if (weakSelf.errorCallback) {
+                weakSelf.isHiddenErrorMessageLabel = NO;
+                weakSelf.errorCallback(error);
             }
         };
     }
@@ -33,7 +41,7 @@
 }
 
 - (BOOL)errorMessageLabelHidden {
-    return YES;
+    return self.isHiddenErrorMessageLabel;
 }
 
 - (NSUInteger)itemCount {
@@ -46,6 +54,10 @@
         return [[CCBRNewsCardViewModel alloc] initWithModel:article];
     }
     return nil;
+}
+
+- (void)loadMore {
+    [self.dataSource loadMore];
 }
 
 @end
