@@ -10,6 +10,7 @@
 #import "CCBRNewsDataSource.h"
 #import "CCBRNewsArticleModel.h"
 #import "CCBRNewsCardViewModel.h"
+#import "CCBREventLogger.h"
 
 @implementation CCBRNewsViewModel
 
@@ -58,6 +59,15 @@
 
 - (void)loadMore {
     [self.dataSource loadMore];
+}
+
+#pragma mark - Log Card Click
+
+- (void)logCardClickEventWithIndex:(NSUInteger)index {
+    CCBRNewsArticleModel *article = [self.dataSource articleAtIndex:index];
+    if (![article.newsFeedId isEqualToString:@""]) {
+        [[CCBREventLogger shared] logCardClick:article.newsFeedId];
+    }
 }
 
 @end

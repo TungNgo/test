@@ -61,6 +61,7 @@ NSURL *GetBaseURL(NSURL *URL) {
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    UrlToFaviconUrlMap = [[NSMutableDictionary alloc] initWithCapacity:0];
     
     [self buildWebView];
     
@@ -95,7 +96,7 @@ NSURL *GetBaseURL(NSURL *URL) {
 - (void)updateUI {
     self.titleLabel.text = self.viewModel.title;
     self.domainLabel.text = self.viewModel.domain;
-//    self.faviconView.image = self.viewModel.favicon;
+    self.faviconView.image = self.viewModel.favicon;
 }
 
 - (void)buildWebView {
@@ -143,6 +144,8 @@ NSURL *GetBaseURL(NSURL *URL) {
     }
 }
 
+#pragma mark - WKWebView Delegate
+
 - (void)webView:(WKWebView *)webView didFailProvisionalNavigation:(WKNavigation *)navigation withError:(NSError *)error {
     
     self.progressView.hidden = YES;
@@ -155,21 +158,36 @@ NSURL *GetBaseURL(NSURL *URL) {
 
 - (void)webView:(WKWebView *)webView didStartProvisionalNavigation:(WKNavigation *)navigation {
     self.progressView.hidden = NO;
-}
-
-- (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation {
-    self.progressView.hidden = YES;
-    
-    NSURL *faviconURL = [UrlToFaviconUrlMap objectForKey:GetBaseURL(self.webView.URL)];
+    NSURL *faviconURL = [UrlToFaviconUrlMap objectForKey:GetBaseURL(self.webView.URL).absoluteString];
     if (faviconURL) {
-        
+        [self.faviconView sd_setImageWithURL:faviconURL placeholderImage:[UIImage imageNamed:@"ccbr_news_article_light"]];
     } else {
         [self tryToUpdateTheFavicon];
     }
 }
 
-- (void)tryToUpdateTheFavicon {
+- (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation {
+    self.progressView.hidden = YES;
     
+    NSURL *faviconURL = [UrlToFaviconUrlMap objectForKey:GetBaseURL(self.webView.URL).absoluteString];
+    if (faviconURL) {
+        [self.faviconView sd_setImageWithURL:faviconURL placeholderImage:[UIImage imageNamed:@"ccbr_news_article_light"]];
+    } else {
+        [self tryToUpdateTheFavicon];
+    }
+    
+    // Log impression
+    [self.viewModel logCardImpression:webView.URL];
+}
+
+- (void)tryToUpdateTheFavicon {
+    NSString *urlString = self.webView.URL.absoluteString;
+    NSString *key = GetBaseURL(self.webView.URL).absoluteString;
+    if (![urlString isEqualToString:@""] && [urlString containsString:@"http"] && ![UrlToFaviconUrlMap objectForKey:key]) {
+        NSString *strFavicon = [NSString stringWithFormat:@"http://www.google.com/s2/favicons?domain=%@",self.webView.URL.absoluteString];
+        NSURL *myURL=[NSURL URLWithString: strFavicon];
+        [UrlToFaviconUrlMap setValue:myURL forKey:GetBaseURL(self.webView.URL).absoluteString];
+    }
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
@@ -183,15 +201,7 @@ NSURL *GetBaseURL(NSURL *URL) {
             self.titleLabel.text = self.webView.title?:self.viewModel.title;
         } else if ([keyPath isEqualToString:kURLKeyPath]) {
             self.domainLabel.text = self.webView.URL.host?:self.viewModel.domain;
-            
-            if (!UrlToFaviconUrlMap) {
-                UrlToFaviconUrlMap = [[NSMutableDictionary alloc] initWithCapacity:0];
-            }
-            
-            NSURL *faviconURL = [UrlToFaviconUrlMap objectForKey:GetBaseURL(self.webView.URL)];
-            if (faviconURL) {
-                [self.faviconView sd_setImageWithURL:faviconURL placeholderImage:[UIImage imageNamed:@"ccbr_news_article_light"]];
-            }
+            [self tryToUpdateTheFavicon];
         }
     } else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];

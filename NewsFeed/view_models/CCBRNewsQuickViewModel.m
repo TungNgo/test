@@ -9,6 +9,7 @@
 
 #import "CCBRNewsArticleModel.h"
 #import "CCBRNewsSourceModel.h"
+#import "CCBREventLogger.h"
 
 @interface CCBRNewsQuickViewModel ()
 
@@ -22,6 +23,7 @@
     self = [super init];
     if (self) {
         self.model = model;
+        self.isLoggedImpression = NO;
     }
     return self;
 }
@@ -51,6 +53,15 @@
 
 - (BOOL)shouldShowSwipeHint {
     return YES;
+}
+
+#pragma mark - Log Card Impression
+
+- (void)logCardImpression: (NSURL *)url {
+    if (![self.model.newsFeedId isEqualToString:@""] && [url.absoluteString isEqualToString:self.model.url] && !self.isLoggedImpression) {
+        [[CCBREventLogger shared] logCardImpression:self.model.newsFeedId];
+        self.isLoggedImpression = YES;
+    }
 }
 
 @end

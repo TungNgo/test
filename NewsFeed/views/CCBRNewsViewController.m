@@ -209,6 +209,7 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
 didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     [self.dispatcher showNewsWithDataSource:self.viewModel.dataSource
                                  startIndex:indexPath.row];
+    [self.viewModel logCardClickEventWithIndex:indexPath.row];
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
