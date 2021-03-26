@@ -17,12 +17,19 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, weak) id<CCBRArticleDataSource> dataSource;
 @property(nonatomic, copy) void (^updateCallback)(void);
 
+//
+@property(nonatomic, copy) void (^errorCallback)(NSString * msg);
+
 - (instancetype)initWithDataSource:(id<CCBRArticleDataSource>)dataSource;
 
 - (BOOL)collectionViewHidden;
 - (BOOL)errorMessageLabelHidden;
 - (NSUInteger)itemCount;
 - (CCBRNewsCardViewModel *)itemViewModelAtIndex:(NSUInteger)index;
+
+//
+- (void)loadMore;
+
 
 @end
 

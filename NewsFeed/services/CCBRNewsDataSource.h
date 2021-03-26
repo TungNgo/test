@@ -19,6 +19,10 @@
 - (CCBRNewsArticleModel*)articleAfterArticle:(CCBRNewsArticleModel*)article;
 - (CCBRNewsArticleModel*)articleAtIndex:(NSInteger)index;
 
+- (void)loadMore;
+
+@property (nonatomic, copy) void (^errorBlock)(NSError* error);
+
 @end
 
 #endif /* CCBRArticleDataSource_h */

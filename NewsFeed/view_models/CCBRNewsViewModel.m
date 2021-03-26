@@ -24,6 +24,14 @@
                 weakSelf.updateCallback();
             }
         };
+        
+        //
+        self.dataSource.errorBlock = ^(NSError * error){
+            
+            if(weakSelf.errorCallback){
+                weakSelf.errorCallback(error.description);
+            }
+        };
     }
     return self;
 }
@@ -47,5 +55,14 @@
     }
     return nil;
 }
+
+
+//load more
+- (void)loadMore{
+    
+    [self.dataSource loadMore];
+    
+}
+
 
 @end

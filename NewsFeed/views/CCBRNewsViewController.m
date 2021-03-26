@@ -12,6 +12,8 @@
 #import "CCBRNewsMediumCardView.h"
 #import "CCBRNewsSmallCardView.h"
 #import "CCBRCommands.h"
+#import "CCBREventLogger.h"
+#import "CCBRNewsCardViewModel.h"
 
 typedef enum : NSUInteger {
     NewsV2CardTypeBig,
@@ -53,6 +55,17 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
                 [weakSelf updateUI];
             });
         };
+        
+        //error callback
+        self.viewModel.errorCallback = ^(NSString* errorMsg){
+          
+            dispatch_async(dispatch_get_main_queue(), ^{
+                weakSelf.errorMessageLabel.text = errorMsg;
+                [weakSelf.errorMessageLabel setHidden: false];
+                [weakSelf.collectionContainerView bringSubviewToFront:weakSelf.errorMessageLabel];
+            });
+        };
+
     }
     return self;
 }
@@ -132,6 +145,22 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
     return cell;
 }
 
+- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.row == self.viewModel.itemCount - 1 ) {
+        
+        NSLog(@"SHOW MORE");
+        
+        [self.viewModel loadMore];
+
+    }
+    
+    //
+    CCBRNewsCardViewModel * item = [self.viewModel itemViewModelAtIndex:indexPath.row];
+    
+    [[CCBREventLogger shared] logCardImpression:item.newsFeedId];
+}
+
+
 #pragma mark <UICollectionViewDelegate>
 
 /*
@@ -190,6 +219,14 @@ didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
 - (IBAction)didTapButton:(UIButton *)sender {
     if (sender == self.settingsButton) {
         // TODO: Show Settings screen
+        
+        //
+        if (@available(iOS 10, *)) {
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString] options:@{} completionHandler:nil];
+        } else {
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+        }
+
     }
 }
 

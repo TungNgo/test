@@ -43,10 +43,14 @@ NSUInteger const pageSize = 30;
         
         if (error) {
             // TODO: Handle error
+            self.errorBlock(error);
+            
         } else {
             CCBRNewsRestResponse *response = [[CCBRNewsRestResponse alloc] initWithData:data error:&error];
             if (error) {
                 // TODO: Handle error
+                self.errorBlock(error);
+
             } else {
                 self.page = response.nextPage.integerValue;
                 NSUInteger startIndex = self.articles.count;
@@ -58,6 +62,10 @@ NSUInteger const pageSize = 30;
             }
         }
     }];
+}
+
+- (void)loadMore{
+    [self loadNextArticles];
 }
 
 - (NSUInteger)articleCount {

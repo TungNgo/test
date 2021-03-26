@@ -188,10 +188,17 @@ NSURL *GetBaseURL(NSURL *URL) {
                 UrlToFaviconUrlMap = [[NSMutableDictionary alloc] initWithCapacity:0];
             }
             
-            NSURL *faviconURL = [UrlToFaviconUrlMap objectForKey:GetBaseURL(self.webView.URL)];
-            if (faviconURL) {
-                [self.faviconView sd_setImageWithURL:faviconURL placeholderImage:[UIImage imageNamed:@"ccbr_news_article_light"]];
-            }
+            //Not working
+//            NSURL *faviconURL = [UrlToFaviconUrlMap objectForKey:GetBaseURL(self.webView.URL)];
+//            if (faviconURL) {
+//                [self.faviconView sd_setImageWithURL:faviconURL placeholderImage:[UIImage imageNamed:@"ccbr_news_article_light"]];
+//            }
+            
+            //
+            NSString *faviconURL2 = [NSString stringWithFormat:@"https://%@/favicon.ico", self.webView.URL.host];
+            
+            [self.faviconView sd_setImageWithURL:[NSURL URLWithString:faviconURL2]
+                         placeholderImage:[UIImage imageNamed:@"ccbr_news_article_light"]];
         }
     } else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
