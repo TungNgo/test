@@ -60,6 +60,10 @@ NSUInteger const pageSize = 30;
     }];
 }
 
+- (void)loadMore{
+    [self loadNextArticles];
+}
+
 - (NSUInteger)articleCount {
     return self.articles.count;
 }
