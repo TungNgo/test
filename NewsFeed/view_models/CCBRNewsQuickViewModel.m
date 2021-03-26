@@ -55,13 +55,4 @@
     return YES;
 }
 
-#pragma mark - Log Card Impression
-
-- (void)logCardImpression: (NSURL *)url {
-    if (![self.model.newsFeedId isEqualToString:@""] && [url.absoluteString isEqualToString:self.model.url] && !self.isLoggedImpression) {
-        [[CCBREventLogger shared] logCardImpression:self.model.newsFeedId];
-        self.isLoggedImpression = YES;
-    }
-}
-
 @end

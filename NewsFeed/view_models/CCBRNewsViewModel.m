@@ -61,12 +61,18 @@
     [self.dataSource loadMore];
 }
 
-#pragma mark - Log Card Click
-
+#pragma mark - Log
 - (void)logCardClickEventWithIndex:(NSUInteger)index {
     CCBRNewsArticleModel *article = [self.dataSource articleAtIndex:index];
     if (![article.newsFeedId isEqualToString:@""]) {
         [[CCBREventLogger shared] logCardClick:article.newsFeedId];
+    }
+}
+
+- (void)logCardImpressionWithIndex:(NSUInteger)index {
+    CCBRNewsArticleModel *article = [self.dataSource articleAtIndex:index];
+    if (![article.newsFeedId isEqualToString:@""]) {
+        [[CCBREventLogger shared] logCardImpression:article.newsFeedId];
     }
 }
 

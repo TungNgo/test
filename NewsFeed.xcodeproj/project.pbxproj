@@ -12,7 +12,7 @@
 		C6956D31260B8FB400B415C4 /* CCBRSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C6956D30260B8FB400B415C4 /* CCBRSettingsViewController.m */; };
 		C6956D37260B8FD200B415C4 /* CCBRSettingsViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = C6956D36260B8FD200B415C4 /* CCBRSettingsViewModel.m */; };
 		C6956D3C260B901100B415C4 /* CCBRSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C6956D3B260B901100B415C4 /* CCBRSettingsViewController.xib */; };
-		C6956D44260B9FBE00B415C4 /* CCBRNewsDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = C6956D43260B9FBD00B415C4 /* CCBRNewsDataStore.m */; };
+		DEA74302260D938D00143DDC /* CCBRNewsDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = DEA74301260D938D00143DDC /* CCBRNewsDataStore.m */; };
 		F195BE6BEFBCBF0C8BAA52EA /* Pods_NewsFeedTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CABF5EB5F5C408FA62FA08A8 /* Pods_NewsFeedTests.framework */; };
 		F906A00F2538253100312DE0 /* CCBRNewsBigCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = F906A00D2538253100312DE0 /* CCBRNewsBigCardView.m */; };
 		F906A0102538253100312DE0 /* CCBRNewsBigCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F906A00E2538253100312DE0 /* CCBRNewsBigCardView.xib */; };
@@ -79,9 +79,9 @@
 		C6956D35260B8FD200B415C4 /* CCBRSettingsViewModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CCBRSettingsViewModel.h; sourceTree = "<group>"; };
 		C6956D36260B8FD200B415C4 /* CCBRSettingsViewModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CCBRSettingsViewModel.m; sourceTree = "<group>"; };
 		C6956D3B260B901100B415C4 /* CCBRSettingsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CCBRSettingsViewController.xib; sourceTree = "<group>"; };
-		C6956D43260B9FBD00B415C4 /* CCBRNewsDataStore.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CCBRNewsDataStore.m; path = /Users/keohoangphuong/GitHub/test/NewsFeed/services/CCBRNewsDataStore.m; sourceTree = "<absolute>"; };
 		C8BAECF27D18DECA027679C7 /* Pods-NewsFeed.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NewsFeed.debug.xcconfig"; path = "Target Support Files/Pods-NewsFeed/Pods-NewsFeed.debug.xcconfig"; sourceTree = "<group>"; };
 		CABF5EB5F5C408FA62FA08A8 /* Pods_NewsFeedTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NewsFeedTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DEA74301260D938D00143DDC /* CCBRNewsDataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCBRNewsDataStore.m; sourceTree = "<group>"; };
 		EE3262AC0D1575645B94E444 /* Pods_NewsFeed_NewsFeedUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NewsFeed_NewsFeedUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F906A00C2538253100312DE0 /* CCBRNewsBigCardView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CCBRNewsBigCardView.h; sourceTree = "<group>"; };
 		F906A00D2538253100312DE0 /* CCBRNewsBigCardView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CCBRNewsBigCardView.m; sourceTree = "<group>"; };
@@ -284,7 +284,7 @@
 			children = (
 				F9DFC5C52535F71D00404DD5 /* CCBRNewsDataSource.h */,
 				F9DFC5C92535F99400404DD5 /* CCBRNewsDataStore.h */,
-				C6956D43260B9FBD00B415C4 /* CCBRNewsDataStore.m */,
+				DEA74301260D938D00143DDC /* CCBRNewsDataStore.m */,
 				F9DFC5CF2536961600404DD5 /* CCBRNewsRestClient.h */,
 				F9DFC5D02536961600404DD5 /* CCBRNewsRestClient.m */,
 				F917A64A2578C0B000C3087E /* CCBREventLogger.h */,
@@ -626,7 +626,7 @@
 				C6956D31260B8FB400B415C4 /* CCBRSettingsViewController.m in Sources */,
 				F9EF0C032535913E00FA6153 /* CCBRNewsQuickViewController.m in Sources */,
 				F97043672577D83000C1C3C2 /* CCBRCoordinator.m in Sources */,
-				C6956D44260B9FBE00B415C4 /* CCBRNewsDataStore.m in Sources */,
+				DEA74302260D938D00143DDC /* CCBRNewsDataStore.m in Sources */,
 				F9C795A425358B5D00D5B365 /* CCBRNewsPageViewController.m in Sources */,
 				F9C7957125357FD400D5B365 /* SceneDelegate.m in Sources */,
 				F9390E6025431F6600B7FF6E /* UIView+CocCoc.m in Sources */,

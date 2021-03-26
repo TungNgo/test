@@ -17,7 +17,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL isLoggedImpression;
 
 - (instancetype)initWithModel:(CCBRNewsArticleModel*)model;
-- (void)logCardImpression: (NSURL *)url;
 
 - (NSString*)title;
 - (NSString*)url;

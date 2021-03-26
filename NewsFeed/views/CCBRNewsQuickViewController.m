@@ -175,9 +175,6 @@ NSURL *GetBaseURL(NSURL *URL) {
     } else {
         [self tryToUpdateTheFavicon];
     }
-    
-    // Log impression
-    [self.viewModel logCardImpression:webView.URL];
 }
 
 - (void)tryToUpdateTheFavicon {

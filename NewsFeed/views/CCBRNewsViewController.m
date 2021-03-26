@@ -174,6 +174,10 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
     return cell;
 }
 
+- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
+    [self.viewModel logCardImpressionWithIndex:indexPath.row];
+}
+
 #pragma mark <UICollectionViewDelegate>
 
 /*
