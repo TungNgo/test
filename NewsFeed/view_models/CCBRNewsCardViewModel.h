@@ -22,6 +22,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSString *)timeText;
 - (NSString *)descriptionText;
 
+//
+- (NSString *)newsFeedId;
+
 @end
 
 NS_ASSUME_NONNULL_END

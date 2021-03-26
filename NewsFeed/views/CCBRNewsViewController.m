@@ -12,6 +12,8 @@
 #import "CCBRNewsMediumCardView.h"
 #import "CCBRNewsSmallCardView.h"
 #import "CCBRCommands.h"
+#import "CCBREventLogger.h"
+#import "CCBRNewsCardViewModel.h"
 
 typedef enum : NSUInteger {
     NewsV2CardTypeBig,
@@ -151,6 +153,11 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
         [self.viewModel loadMore];
 
     }
+    
+    //
+    CCBRNewsCardViewModel * item = [self.viewModel itemViewModelAtIndex:indexPath.row];
+    
+    [[CCBREventLogger shared] logCardImpression:item.newsFeedId];
 }
 
 
