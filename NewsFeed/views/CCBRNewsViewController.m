@@ -212,6 +212,14 @@ didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
 - (IBAction)didTapButton:(UIButton *)sender {
     if (sender == self.settingsButton) {
         // TODO: Show Settings screen
+        
+        //
+        if (@available(iOS 10, *)) {
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString] options:@{} completionHandler:nil];
+        } else {
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+        }
+
     }
 }
 
