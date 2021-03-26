@@ -19,6 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)start;
 
+@property (nonatomic, copy) void (^errorBlock)(NSError* error);
+
 @end
 
 NS_ASSUME_NONNULL_END

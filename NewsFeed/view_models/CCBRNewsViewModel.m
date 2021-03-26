@@ -24,6 +24,14 @@
                 weakSelf.updateCallback();
             }
         };
+        
+        //
+        self.dataSource.errorBlock = ^(NSError * error){
+            
+            if(weakSelf.errorCallback){
+                weakSelf.errorCallback(error.description);
+            }
+        };
     }
     return self;
 }

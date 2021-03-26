@@ -21,6 +21,8 @@
 
 - (void)loadMore;
 
+@property (nonatomic, copy) void (^errorBlock)(NSError* error);
+
 @end
 
 #endif /* CCBRArticleDataSource_h */
