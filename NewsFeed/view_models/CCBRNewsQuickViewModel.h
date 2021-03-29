@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface CCBRNewsQuickViewModel : NSObject
 
 @property(nonatomic, strong, readonly) CCBRNewsArticleModel*model;
+@property (nonatomic, assign) BOOL isLoggedImpression;
 
 - (instancetype)initWithModel:(CCBRNewsArticleModel*)model;
 

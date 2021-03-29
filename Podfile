@@ -8,6 +8,7 @@ target 'NewsFeed' do
   # Pods for NewsFeed
   pod 'JSONModel'
   pod 'SDWebImage'
+  pod 'SVPullToRefresh'
 
   target 'NewsFeedTests' do
     inherit! :search_paths

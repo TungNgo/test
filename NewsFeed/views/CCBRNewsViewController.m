@@ -53,6 +53,11 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
                 [weakSelf updateUI];
             });
         };
+        self.viewModel.errorCallback = ^(NSError *error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf loadDataError:error];
+            });
+        };
     }
     return self;
 }
@@ -63,6 +68,11 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
 //    self.cardType = NewsV2CardTypeBig;
 //    self.cardType = NewsV2CardTypeSmall;
     self.cardType = NewsV2CardTypeMedium;
+    
+    __weak CCBRNewsViewController *weakSelf = self;
+    [self.collectionView addInfiniteScrollingWithActionHandler:^{
+        [weakSelf.viewModel loadMore];
+    }];
     
     if (self.cardType == NewsV2CardTypeMedium || self.cardType == NewsV2CardTypeSmall) {
         UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *) self.collectionView.collectionViewLayout;
@@ -78,14 +88,23 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
     [self.collectionView registerNib:[UINib nibWithNibName:kCCBRNewsSmallCardView
                                                     bundle:nil]
           forCellWithReuseIdentifier:kCCBRNewsSmallCardView];
-    
-    [self updateUI];
 }
 
 - (void)updateUI {
-    self.collectionView.hidden = self.viewModel.collectionViewHidden;
+    self.loadingIndicatorView.hidden = YES;
     self.errorMessageLabel.hidden = self.viewModel.errorMessageLabelHidden;
     [self.collectionView reloadData];
+    [self.collectionView.infiniteScrollingView stopAnimating];
+}
+
+- (void)loadDataError: (NSError*)error {
+    self.loadingIndicatorView.hidden = YES;
+    self.errorMessageLabel.hidden = self.viewModel.errorMessageLabelHidden;
+    NSString* message = [self.viewModel showErrorMessage:error];
+    if (![message isEqualToString:@""]) {
+        self.errorMessageLabel.text = message;
+    }
+    [self.collectionView.infiniteScrollingView stopAnimating];
 }
 
 /*
@@ -132,6 +151,10 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
     return cell;
 }
 
+- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
+    [self.viewModel logCardImpressionWithIndex:indexPath.row];
+}
+
 #pragma mark <UICollectionViewDelegate>
 
 /*
@@ -167,6 +190,7 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
 didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     [self.dispatcher showNewsWithDataSource:self.viewModel.dataSource
                                  startIndex:indexPath.row];
+    [self.viewModel logCardClickEventWithIndex:indexPath.row];
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -190,6 +214,7 @@ didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
 - (IBAction)didTapButton:(UIButton *)sender {
     if (sender == self.settingsButton) {
         // TODO: Show Settings screen
+        [self.dispatcher showSettings];
     }
 }
 

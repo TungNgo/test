@@ -9,6 +9,7 @@
 
 #import "CCBRNewsArticleModel.h"
 #import "CCBRNewsSourceModel.h"
+#import "CCBREventLogger.h"
 
 @interface CCBRNewsQuickViewModel ()
 
@@ -22,6 +23,7 @@
     self = [super init];
     if (self) {
         self.model = model;
+        self.isLoggedImpression = NO;
     }
     return self;
 }
