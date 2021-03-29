@@ -14,6 +14,7 @@
 @property (strong, nonatomic) UIWindow * window;
 
 - (UIViewController*) topMostController;
+- (void)showMessage: (NSString*)message;
 
 @end
 

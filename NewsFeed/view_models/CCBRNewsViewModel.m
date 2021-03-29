@@ -11,6 +11,7 @@
 #import "CCBRNewsArticleModel.h"
 #import "CCBRNewsCardViewModel.h"
 #import "CCBREventLogger.h"
+#import "AppDelegate.h"
 
 @implementation CCBRNewsViewModel
 
@@ -42,7 +43,22 @@
 }
 
 - (BOOL)errorMessageLabelHidden {
-    return self.isHiddenErrorMessageLabel;
+    if (self.collectionViewHidden && !self.isHiddenErrorMessageLabel) {
+        return NO;
+    }
+    return YES;
+}
+
+- (NSString*)showErrorMessage:(NSError *)error {
+    NSString* message = @"API errors";
+    if (![error.localizedDescription isEqualToString:@""]) {
+        message = error.localizedDescription;
+    }
+    if (self.errorMessageLabelHidden) {
+        [APPDELEGATE showMessage:message];
+        return @"";
+    }
+    return message;
 }
 
 - (NSUInteger)itemCount {

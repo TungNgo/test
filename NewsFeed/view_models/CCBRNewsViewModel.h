@@ -28,6 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)loadMore;
 - (void)logCardClickEventWithIndex:(NSUInteger)index;
 - (void)logCardImpressionWithIndex:(NSUInteger)index;
+- (NSString*)showErrorMessage:(NSError *)error;
 
 @end
 

@@ -88,46 +88,23 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
     [self.collectionView registerNib:[UINib nibWithNibName:kCCBRNewsSmallCardView
                                                     bundle:nil]
           forCellWithReuseIdentifier:kCCBRNewsSmallCardView];
-    
-    [self updateUI];
 }
 
 - (void)updateUI {
     self.loadingIndicatorView.hidden = YES;
-    self.collectionView.hidden = self.viewModel.collectionViewHidden;
     self.errorMessageLabel.hidden = self.viewModel.errorMessageLabelHidden;
     [self.collectionView reloadData];
     [self.collectionView.infiniteScrollingView stopAnimating];
 }
 
 - (void)loadDataError: (NSError*)error {
-    NSString* message = @"API errors";
-    if (![error.localizedDescription isEqualToString:@""]) {
-        message = error.localizedDescription;
-    }
-    if (self.viewModel.collectionViewHidden && !self.viewModel.errorMessageLabelHidden) {
-        self.errorMessageLabel.text = message;
-    } else {
-        [self showMessage:message];
-    }
     self.loadingIndicatorView.hidden = YES;
-    self.collectionView.hidden = self.viewModel.collectionViewHidden;
     self.errorMessageLabel.hidden = self.viewModel.errorMessageLabelHidden;
+    NSString* message = [self.viewModel showErrorMessage:error];
+    if (![message isEqualToString:@""]) {
+        self.errorMessageLabel.text = message;
+    }
     [self.collectionView.infiniteScrollingView stopAnimating];
-}
-
-- (void)showMessage: (NSString*)message {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error"
-                                                                   message:message
-                                                            preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *firstAction = [UIAlertAction actionWithTitle:@"Close"
-                                                          style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
-        NSLog(@"You pressed button close");
-    }]; // 2
-    
-    [alert addAction:firstAction];
-    
-    [self presentViewController:alert animated:YES completion:nil];
 }
 
 /*

@@ -30,6 +30,22 @@
     return topController;
 }
 
+#pragma mark - Show alert
+
+- (void)showMessage: (NSString*)message {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error"
+                                                                   message:message
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *firstAction = [UIAlertAction actionWithTitle:@"Close"
+                                                          style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+        NSLog(@"You pressed button close");
+    }];
+    
+    [alert addAction:firstAction];
+    
+    [[self topMostController] presentViewController:alert animated:YES completion:nil];
+}
+
 #pragma mark - UISceneSession lifecycle
 
 
