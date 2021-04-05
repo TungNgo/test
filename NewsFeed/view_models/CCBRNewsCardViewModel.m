@@ -49,6 +49,11 @@
     return self.model.title;
 }
 
+- (NSString*)newsFeedId {
+    return self.model.newsFeedId;
+}
+
+
 - (NSString*)timeText {
     NSDate *date;
     

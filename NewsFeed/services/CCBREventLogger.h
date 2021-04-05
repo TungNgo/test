@@ -12,6 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface CCBREventLogger : NSObject
 
 + (instancetype)shared;
+@property (nonatomic, strong) NSMutableDictionary *logs;
 
 - (void)logCardImpression:(NSString *)cardId;
 - (void)logCardClick:(NSString *)cardId;
