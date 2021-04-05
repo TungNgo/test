@@ -57,4 +57,12 @@
     return nil;
 }
 
+
+- (void)goSetting
+{
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString] options:@{} completionHandler:^(BOOL success) {
+            
+    }];
+}
+
 @end
