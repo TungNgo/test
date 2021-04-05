@@ -12,6 +12,7 @@
 #import "CCBRNewsMediumCardView.h"
 #import "CCBRNewsSmallCardView.h"
 #import "CCBRCommands.h"
+#import "NSString+CocCoc.h"
 
 typedef enum : NSUInteger {
     NewsV2CardTypeBig,
@@ -48,9 +49,9 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
         self.dispatcher = dispatcher;
         
         __weak CCBRNewsViewController *weakSelf = self;
-        self.viewModel.updateCallback = ^{
+        self.viewModel.updateCallback = ^(NSString *  errorDescription) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [weakSelf updateUI];
+                 [weakSelf updateUIWithError:errorDescription];
             });
         };
     }
@@ -79,13 +80,17 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
                                                     bundle:nil]
           forCellWithReuseIdentifier:kCCBRNewsSmallCardView];
     
-    [self updateUI];
+    [self updateUIWithError:@""];
 }
 
-- (void)updateUI {
-    self.collectionView.hidden = self.viewModel.collectionViewHidden;
-    self.errorMessageLabel.hidden = self.viewModel.errorMessageLabelHidden;
-    [self.collectionView reloadData];
+- (void)updateUIWithError:(NSString*)error {
+    
+    self.collectionView.hidden = self.viewModel.collectionViewHidden ;
+    if ([error isEmpty]) [self.collectionView reloadData];
+    
+    self.errorMessageLabel.hidden = [error isEmpty];
+    self.errorMessageLabel.text = error;
+    [self.collectionContainerView bringSubviewToFront:self.errorMessageLabel];
 }
 
 /*

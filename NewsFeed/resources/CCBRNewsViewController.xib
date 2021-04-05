@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -32,6 +32,7 @@
                         </activityIndicatorView>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DdS-Q4-zVr">
                             <rect key="frame" x="16" y="398.5" width="382" height="21"/>
+                            <color key="backgroundColor" red="0.0056511374339999997" green="0.64693976679999998" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
@@ -98,7 +99,9 @@
                         <constraint firstItem="k8Z-Qr-02v" firstAttribute="top" secondItem="Oj9-RS-rFQ" secondAttribute="top" id="3hF-zq-ZKr"/>
                         <constraint firstAttribute="trailing" secondItem="DdS-Q4-zVr" secondAttribute="trailing" constant="16" id="DWC-Hz-7du"/>
                         <constraint firstItem="DdS-Q4-zVr" firstAttribute="centerY" secondItem="Oj9-RS-rFQ" secondAttribute="centerY" id="Ho8-l2-kcn"/>
+                        <constraint firstItem="DdS-Q4-zVr" firstAttribute="centerY" secondItem="Oj9-RS-rFQ" secondAttribute="centerY" id="LX8-xz-JwW"/>
                         <constraint firstItem="DdS-Q4-zVr" firstAttribute="leading" secondItem="Oj9-RS-rFQ" secondAttribute="leading" constant="16" id="N6V-xd-Grr"/>
+                        <constraint firstItem="DdS-Q4-zVr" firstAttribute="centerX" secondItem="Oj9-RS-rFQ" secondAttribute="centerX" id="PfR-bT-si4"/>
                         <constraint firstItem="qUy-Ft-kKN" firstAttribute="centerY" secondItem="Oj9-RS-rFQ" secondAttribute="centerY" id="TSA-af-PgY"/>
                         <constraint firstAttribute="bottom" secondItem="k8Z-Qr-02v" secondAttribute="bottom" id="UWC-qD-a82"/>
                         <constraint firstItem="qUy-Ft-kKN" firstAttribute="centerX" secondItem="Oj9-RS-rFQ" secondAttribute="centerX" id="VFT-Zt-Qta"/>
@@ -115,7 +118,7 @@
                 <constraint firstItem="Oj9-RS-rFQ" firstAttribute="top" secondItem="Q5M-cg-NOt" secondAttribute="top" id="dN0-nt-0bY"/>
                 <constraint firstItem="Q5M-cg-NOt" firstAttribute="trailing" secondItem="Oj9-RS-rFQ" secondAttribute="trailing" id="mp3-wG-r6r"/>
             </constraints>
-            <point key="canvasLocation" x="-230" y="80"/>
+            <point key="canvasLocation" x="136" y="78"/>
         </view>
     </objects>
     <resources>

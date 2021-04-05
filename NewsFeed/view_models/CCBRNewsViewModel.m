@@ -21,7 +21,13 @@
         __weak CCBRNewsViewModel *weakSelf = self;
         self.dataSource.nextArticlesCallback = ^(NSUInteger startIndex, NSUInteger endIndex) {
             if (weakSelf.updateCallback) {
-                weakSelf.updateCallback();
+                weakSelf.updateCallback(@"");
+            }
+        };
+        
+        self.dataSource.errorCallBack = ^(NSString *errorDescription) {
+            if (weakSelf.updateCallback) {
+                weakSelf.updateCallback(errorDescription);
             }
         };
     }

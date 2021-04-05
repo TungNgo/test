@@ -42,11 +42,17 @@ NSUInteger const pageSize = 30;
         self.loading = NO;
         
         if (error) {
-            // TODO: Handle error
+            if (self.nextArticlesCallback) {
+                self.errorCallBack(error.description);
+            }
+
         } else {
             CCBRNewsRestResponse *response = [[CCBRNewsRestResponse alloc] initWithData:data error:&error];
             if (error) {
-                // TODO: Handle error
+                if (self.nextArticlesCallback) {
+                    self.errorCallBack(error.description);
+                }
+
             } else {
                 self.page = response.nextPage.integerValue;
                 NSUInteger startIndex = self.articles.count;

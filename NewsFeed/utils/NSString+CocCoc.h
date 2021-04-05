@@ -6,7 +6,7 @@
 #import <UIKit/UIKit.h>
 
 @interface NSString (CocCoc)
-
+-(BOOL)isEmpty;
 - (NSString*)ccbr_stringByAddingQueryItems:(NSDictionary*)queryItems;
 
 @end
