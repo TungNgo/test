@@ -27,6 +27,9 @@
     }
     return self;
 }
+-(void)loadMoreItem{
+    [self.dataSource loadNextArticles] ;
+}
 
 - (BOOL)collectionViewHidden {
     return self.dataSource.articleCount == 0;
