@@ -138,17 +138,13 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
     
     CCBRNewsCardViewModel *itemViewModel = [self.viewModel itemViewModelAtIndex:indexPath.row];
     [[CCBREventLogger shared]logCardImpression:[itemViewModel newsFeedId]];
-
     return cell;
 }
 
 
 -(void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    if((indexPath.row) == self.viewModel.itemCount-1)
-    {
-        [self.viewModel loadMoreItem];
-    }
+    [self.viewModel willDisplayItemAtIndex:indexPath.row];
 }
 
 #pragma mark <UICollectionViewDelegate>

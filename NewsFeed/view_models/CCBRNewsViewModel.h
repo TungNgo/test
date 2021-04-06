@@ -23,6 +23,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)errorMessageLabelHidden;
 - (NSUInteger)itemCount;
 - (CCBRNewsCardViewModel *)itemViewModelAtIndex:(NSUInteger)index;
+- (void)willDisplayItemAtIndex:(NSUInteger)index;
+
+
 -(void)loadMoreItem;
 - (void)goSetting;
 

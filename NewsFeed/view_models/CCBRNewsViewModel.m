@@ -57,6 +57,14 @@
     return nil;
 }
 
+- (void)willDisplayItemAtIndex:(NSUInteger)index{
+    if(index == ([self itemCount] - 1))
+    {
+        [self loadMoreItem];
+    }
+}
+
+
 
 - (void)goSetting
 {
