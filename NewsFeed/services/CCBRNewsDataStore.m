@@ -42,14 +42,14 @@ NSUInteger const pageSize = 30;
         self.loading = NO;
         
         if (error) {
-            if (self.nextArticlesCallback) {
+            if (self.errorCallBack) {
                 self.errorCallBack(error.description);
             }
 
         } else {
             CCBRNewsRestResponse *response = [[CCBRNewsRestResponse alloc] initWithData:data error:&error];
             if (error) {
-                if (self.nextArticlesCallback) {
+                if (self.errorCallBack) {
                     self.errorCallBack(error.description);
                 }
 
