@@ -41,4 +41,11 @@
     [self.baseViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (void)showSettingScreen
+{
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString] options:@{} completionHandler:^(BOOL success) {
+            
+    }];
+}
+
 @end

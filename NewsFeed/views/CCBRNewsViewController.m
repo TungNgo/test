@@ -208,7 +208,7 @@ didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
 
 - (IBAction)didTapButton:(UIButton *)sender {
     if (sender == self.settingsButton) {
-        [self.viewModel goSetting];
+        [self.dispatcher showSettingScreen];
     }
 }
 

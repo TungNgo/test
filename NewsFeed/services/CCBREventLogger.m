@@ -7,7 +7,6 @@
 
 #import "CCBREventLogger.h"
 
-
 @interface LogItem : NSObject
 @property (nonatomic, strong) NSString*cardId;
 @property (nonatomic, assign) NSInteger impressionCounting;
@@ -23,10 +22,7 @@
     self.cardId = newFeedId ;
     return  self;
 }
-
 @end
-
-
 
 @implementation CCBREventLogger
 
@@ -36,7 +32,6 @@
     dispatch_once(&onceToken, ^{
         shared = [[CCBREventLogger alloc] init];
         shared.logs =  [[NSMutableDictionary alloc] init];
-
     });
     return shared;
 }
@@ -54,7 +49,6 @@
     [self.logs setValue:item forKey:cardId];
     NSLog(@"<CardClick> %@------- : %ld", cardId,(long)item.lickCounting);
 }
-
 
 -(LogItem*)forceGetModelWithId:(NSString*)cardId
 {

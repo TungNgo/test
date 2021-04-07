@@ -33,9 +33,6 @@
     }
     return self;
 }
--(void)loadMoreItem{
-    [self.dataSource loadNextArticles] ;
-}
 
 - (BOOL)collectionViewHidden {
     return self.dataSource.articleCount == 0;
@@ -60,17 +57,10 @@
 - (void)willDisplayItemAtIndex:(NSUInteger)index{
     if(index == ([self itemCount] - 1))
     {
-        [self loadMoreItem];
+        [self.dataSource loadNextArticles] ;
     }
 }
 
 
-
-- (void)goSetting
-{
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString] options:@{} completionHandler:^(BOOL success) {
-            
-    }];
-}
 
 @end
