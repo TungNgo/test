@@ -51,9 +51,9 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
         self.dispatcher = dispatcher;
         
         __weak CCBRNewsViewController *weakSelf = self;
-        self.viewModel.updateCallback = ^(NSString *  errorDescription) {
+        self.viewModel.updateCallback = ^() {
             dispatch_async(dispatch_get_main_queue(), ^{
-                 [weakSelf updateUIWithError:errorDescription];
+                 [weakSelf updateUI];
             });
         };
     }
@@ -82,17 +82,17 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
                                                     bundle:nil]
           forCellWithReuseIdentifier:kCCBRNewsSmallCardView];
     
-    [self updateUIWithError:@""];
+    [self updateUI];
 }
 
-- (void)updateUIWithError:(NSString*)error {
+- (void)updateUI {
+    self.errorMessageLabel.hidden = self.viewModel.errorMessageLabelHidden;
+    self.errorMessageLabel.text = self.viewModel.errorMessageDescription;
+    
+    [self.collectionContainerView bringSubviewToFront:self.errorMessageLabel];
     
     self.collectionView.hidden = self.viewModel.collectionViewHidden ;
-    if ([error isEmpty]) [self.collectionView reloadData];
-    
-    self.errorMessageLabel.hidden = [error isEmpty];
-    self.errorMessageLabel.text = error;
-    [self.collectionContainerView bringSubviewToFront:self.errorMessageLabel];
+    if(self.viewModel.shouldReloadGridData) [self.collectionView reloadData];
 }
 
 /*
