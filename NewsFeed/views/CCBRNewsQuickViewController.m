@@ -184,14 +184,15 @@ NSURL *GetBaseURL(NSURL *URL) {
         } else if ([keyPath isEqualToString:kURLKeyPath]) {
             self.domainLabel.text = self.webView.URL.host?:self.viewModel.domain;
             
-            if (!UrlToFaviconUrlMap) {
-                UrlToFaviconUrlMap = [[NSMutableDictionary alloc] initWithCapacity:0];
-            }
-            
-            NSURL *faviconURL = [UrlToFaviconUrlMap objectForKey:GetBaseURL(self.webView.URL)];
-            if (faviconURL) {
-                [self.faviconView sd_setImageWithURL:faviconURL placeholderImage:[UIImage imageNamed:@"ccbr_news_article_light"]];
-            }
+            // Đoạn này không chạy do hash không chứa gì cả
+//            NSURL *faviconURL = [UrlToFaviconUrlMap objectForKey:GetBaseURL(self.webView.URL)];
+//            if (faviconURL) {
+//                [self.faviconView sd_setImageWithURL:faviconURL placeholderImage:[UIImage imageNamed:@"ccbr_news_article_light"]];
+//            }
+
+            NSString *newFavi = [NSString stringWithFormat:@"https://%@/favicon.ico", self.webView.URL.host];
+            [self.faviconView sd_setImageWithURL:[NSURL URLWithString:newFavi]
+                         placeholderImage:[UIImage imageNamed:@"ccbr_news_article_light"]];
         }
     } else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];

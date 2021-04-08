@@ -9,6 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @implementation NSString (CocCoc)
+-(BOOL)isEmpty{
+    return [self isEqualToString:@""];;
+}
 
 - (NSString*)ccbr_stringByAddingQueryItems:(NSDictionary*)keyValuePairs {
   NSURLComponents* components = [NSURLComponents componentsWithString:self];

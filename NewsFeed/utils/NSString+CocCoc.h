@@ -6,9 +6,12 @@
 #import <UIKit/UIKit.h>
 
 @interface NSString (CocCoc)
-
+-(BOOL)isEmpty;
 - (NSString*)ccbr_stringByAddingQueryItems:(NSDictionary*)queryItems;
 
 @end
 
 #endif  // IOS_COCCOC_COMMON_NSSTRING_COCCOC_H_
+
+
+// Check Commit 

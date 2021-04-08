@@ -10,6 +10,16 @@
 #import "CCBRNewsDataSource.h"
 #import "CCBRNewsArticleModel.h"
 #import "CCBRNewsCardViewModel.h"
+#import "NSString+CocCoc.h"
+
+
+@interface CCBRNewsViewModel ()
+
+@property(nonatomic, strong) NSString *errorRequeestDescription;
+
+@end
+
+
 
 @implementation CCBRNewsViewModel
 
@@ -21,6 +31,14 @@
         __weak CCBRNewsViewModel *weakSelf = self;
         self.dataSource.nextArticlesCallback = ^(NSUInteger startIndex, NSUInteger endIndex) {
             if (weakSelf.updateCallback) {
+                weakSelf.errorRequeestDescription = @"" ;
+                weakSelf.updateCallback();
+            }
+        };
+        
+        self.dataSource.errorCallBack = ^(NSString *errorDescription) {
+            if (weakSelf.updateCallback) {
+                weakSelf.errorRequeestDescription = errorDescription ;
                 weakSelf.updateCallback();
             }
         };
@@ -31,13 +49,20 @@
 - (BOOL)collectionViewHidden {
     return self.dataSource.articleCount == 0;
 }
+- (NSString*)errorMessageDescription{
+    return self.errorRequeestDescription;
+}
 
 - (BOOL)errorMessageLabelHidden {
-    return YES;
+    return [self.errorRequeestDescription isEmpty];
 }
 
 - (NSUInteger)itemCount {
     return self.dataSource.articleCount;
+}
+
+- (BOOL)shouldReloadGridData{
+    return [self.errorRequeestDescription isEmpty];
 }
 
 - (CCBRNewsCardViewModel *)itemViewModelAtIndex:(NSUInteger)index {
@@ -47,5 +72,14 @@
     }
     return nil;
 }
+
+- (void)willDisplayItemAtIndex:(NSUInteger)index{
+    if(index == ([self itemCount] - 1))
+    {
+        [self.dataSource loadNextArticles] ;
+    }
+}
+
+
 
 @end

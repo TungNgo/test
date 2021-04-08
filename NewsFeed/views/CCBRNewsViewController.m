@@ -12,6 +12,9 @@
 #import "CCBRNewsMediumCardView.h"
 #import "CCBRNewsSmallCardView.h"
 #import "CCBRCommands.h"
+#import "NSString+CocCoc.h"
+#import "CCBREventLogger.h"
+#import "CCBRNewsCardViewModel.h"
 
 typedef enum : NSUInteger {
     NewsV2CardTypeBig,
@@ -48,9 +51,9 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
         self.dispatcher = dispatcher;
         
         __weak CCBRNewsViewController *weakSelf = self;
-        self.viewModel.updateCallback = ^{
+        self.viewModel.updateCallback = ^() {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [weakSelf updateUI];
+                 [weakSelf updateUI];
             });
         };
     }
@@ -83,9 +86,13 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
 }
 
 - (void)updateUI {
-    self.collectionView.hidden = self.viewModel.collectionViewHidden;
     self.errorMessageLabel.hidden = self.viewModel.errorMessageLabelHidden;
-    [self.collectionView reloadData];
+    self.errorMessageLabel.text = self.viewModel.errorMessageDescription;
+    
+    [self.collectionContainerView bringSubviewToFront:self.errorMessageLabel];
+    
+    self.collectionView.hidden = self.viewModel.collectionViewHidden ;
+    if(self.viewModel.shouldReloadGridData) [self.collectionView reloadData];
 }
 
 /*
@@ -129,7 +136,15 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
         cell = bigCardView;
     }
     
+    CCBRNewsCardViewModel *itemViewModel = [self.viewModel itemViewModelAtIndex:indexPath.row];
+    [[CCBREventLogger shared]logCardImpression:[itemViewModel newsFeedId]];
     return cell;
+}
+
+
+-(void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    [self.viewModel willDisplayItemAtIndex:indexPath.row];
 }
 
 #pragma mark <UICollectionViewDelegate>
@@ -167,6 +182,10 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
 didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     [self.dispatcher showNewsWithDataSource:self.viewModel.dataSource
                                  startIndex:indexPath.row];
+    
+    CCBRNewsCardViewModel *itemViewModel = [self.viewModel itemViewModelAtIndex:indexPath.row];
+    [[CCBREventLogger shared]logCardClick:[itemViewModel newsFeedId]];
+
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -189,7 +208,7 @@ didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
 
 - (IBAction)didTapButton:(UIButton *)sender {
     if (sender == self.settingsButton) {
-        // TODO: Show Settings screen
+        [self.dispatcher showSettingScreen];
     }
 }
 
