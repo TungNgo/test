@@ -79,4 +79,8 @@
     return nil;
 }
 
+- (void)goToSettingScreen {
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]  options:@{} completionHandler:nil];
+}
+
 @end
