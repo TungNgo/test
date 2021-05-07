@@ -28,6 +28,12 @@
     return self;
 }
 
+- (void)loadMoreArticlesAtIndex:(NSUInteger)index {
+    if (index == [self itemCount] - 1) {
+        [self.dataSource loadNextArticles];
+    }
+}
+
 - (BOOL)collectionViewHidden {
     return self.dataSource.articleCount == 0;
 }

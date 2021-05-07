@@ -185,6 +185,10 @@ didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     return CGSizeMake(itemWidth, itemHeight);
 }
 
+- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
+    [self.viewModel loadMoreArticlesAtIndex:indexPath.row];
+}
+
 #pragma mark - Event Handlers
 
 - (IBAction)didTapButton:(UIButton *)sender {
