@@ -13,6 +13,7 @@
 @protocol CCBRArticleDataSource <NSObject>
 
 @property (nonatomic, copy) void (^nextArticlesCallback)(NSUInteger startIndex, NSUInteger endIndex);
+@property (nonatomic, copy) void (^errorCallBack)(NSError *error);
 
 - (NSUInteger)articleCount;
 - (CCBRNewsArticleModel*)articleBeforeArticle:(CCBRNewsArticleModel*)article;

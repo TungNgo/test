@@ -24,6 +24,11 @@
                 weakSelf.updateCallback();
             }
         };
+        self.dataSource.errorCallBack = ^(NSError *error) {
+            if (weakSelf.updateErrorCallback) {
+                weakSelf.updateErrorCallback(error);
+            }
+        };
     }
     return self;
 }
@@ -38,8 +43,28 @@
     return self.dataSource.articleCount == 0;
 }
 
+- (BOOL)collectionViewHidden:(NSError *)error {
+    if (error) {
+        return YES;
+    } else {
+        return NO;
+    }
+}
+
 - (BOOL)errorMessageLabelHidden {
     return YES;
+}
+
+- (BOOL)errorMessageLabelHidden:(NSError *)error {
+    if (error) {
+        return NO;
+    } else {
+        return YES;
+    }
+}
+
+- (NSString *)errorMessageLabelText:(NSError *)error {
+    return error.description;
 }
 
 - (NSUInteger)itemCount {

@@ -53,6 +53,12 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
                 [weakSelf updateUI];
             });
         };
+        
+        self.viewModel.updateErrorCallback = ^(NSError * _Nonnull error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf updateErrorUI:error];
+            });
+        };
     }
     return self;
 }
@@ -86,6 +92,12 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
     self.collectionView.hidden = self.viewModel.collectionViewHidden;
     self.errorMessageLabel.hidden = self.viewModel.errorMessageLabelHidden;
     [self.collectionView reloadData];
+}
+
+- (void)updateErrorUI:(NSError *)error {
+    self.collectionView.hidden = [self.viewModel collectionViewHidden:error];
+    self.errorMessageLabel.hidden = [self.viewModel errorMessageLabelHidden:error];
+    self.errorMessageLabel.text = [self.viewModel errorMessageLabelText:error];
 }
 
 /*
