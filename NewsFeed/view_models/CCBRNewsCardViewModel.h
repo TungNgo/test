@@ -21,6 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSString *)titleText;
 - (NSString *)timeText;
 - (NSString *)descriptionText;
+- (NSString *)articleId;
 
 @end
 

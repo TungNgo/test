@@ -70,4 +70,8 @@
     return self.model.desc;
 }
 
+- (NSString *)articleId {
+    return self.model.newsFeedId;
+}
+
 @end

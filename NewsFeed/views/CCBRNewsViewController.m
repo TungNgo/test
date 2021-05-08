@@ -12,6 +12,8 @@
 #import "CCBRNewsMediumCardView.h"
 #import "CCBRNewsSmallCardView.h"
 #import "CCBRCommands.h"
+#import "CCBREventLogger.h"
+#import "CCBRNewsCardViewModel.h"
 
 typedef enum : NSUInteger {
     NewsV2CardTypeBig,
@@ -127,16 +129,20 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
     if (self.cardType == NewsV2CardTypeSmall) {
         CCBRNewsSmallCardView *smallCardView = (CCBRNewsSmallCardView *)[collectionView dequeueReusableCellWithReuseIdentifier:kCCBRNewsSmallCardView forIndexPath:indexPath];
         CCBRNewsCardViewModel *itemViewModel = [self.viewModel itemViewModelAtIndex:indexPath.row];
+        [[CCBREventLogger shared] logCardImpression:itemViewModel.articleId];
         smallCardView.viewModel = itemViewModel;
         cell = smallCardView;
     } else if (self.cardType == NewsV2CardTypeMedium) {
         CCBRNewsMediumCardView *mediumCardView = (CCBRNewsMediumCardView *)[collectionView dequeueReusableCellWithReuseIdentifier:kCCBRNewsMediumCardView forIndexPath:indexPath];
         CCBRNewsCardViewModel *itemViewModel = [self.viewModel itemViewModelAtIndex:indexPath.row];
+        [[CCBREventLogger shared] logCardImpression:itemViewModel.articleId];
         mediumCardView.viewModel = itemViewModel;
         cell = mediumCardView;
+        
     } else if (self.cardType == NewsV2CardTypeBig) {
         CCBRNewsBigCardView *bigCardView = (CCBRNewsBigCardView *)[collectionView dequeueReusableCellWithReuseIdentifier:kCCBRNewsBigCardView forIndexPath:indexPath];
         CCBRNewsCardViewModel *itemViewModel = [self.viewModel itemViewModelAtIndex:indexPath.row];
+        [[CCBREventLogger shared] logCardImpression:itemViewModel.articleId];
         bigCardView.viewModel = itemViewModel;
         cell = bigCardView;
     }
@@ -177,6 +183,8 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
 
 - (void)collectionView:(UICollectionView *)collectionView
 didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    CCBRNewsCardViewModel * item = [self.viewModel itemViewModelAtIndex:indexPath.row];
+    [[CCBREventLogger shared] logCardClick:item.articleId];
     [self.dispatcher showNewsWithDataSource:self.viewModel.dataSource
                                  startIndex:indexPath.row];
 }
