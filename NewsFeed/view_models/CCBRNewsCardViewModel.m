@@ -71,7 +71,11 @@
 }
 
 - (NSString *)articleId {
-    return self.model.newsFeedId;
+    if (self.model.newsFeedId != nil) {
+        return self.model.newsFeedId;
+    } else {
+        return @"ID does not exist";
+    }
 }
 
 @end
