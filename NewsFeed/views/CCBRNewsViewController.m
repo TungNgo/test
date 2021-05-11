@@ -213,7 +213,9 @@ didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
 
 - (IBAction)didTapButton:(UIButton *)sender {
     if (sender == self.settingsButton) {
-        [self.viewModel goToSettingScreen];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.viewModel goToSettingScreen];
+        });
     }
 }
 
