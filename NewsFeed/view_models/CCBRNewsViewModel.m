@@ -24,16 +24,47 @@
                 weakSelf.updateCallback();
             }
         };
+        self.dataSource.errorCallBack = ^(NSError *error) {
+            if (weakSelf.updateErrorCallback) {
+                weakSelf.updateErrorCallback(error);
+            }
+        };
     }
     return self;
+}
+
+- (void)loadMoreArticlesAtIndex:(NSUInteger)index {
+    if (index == [self itemCount] - 1) {
+        [self.dataSource loadNextArticles];
+    }
 }
 
 - (BOOL)collectionViewHidden {
     return self.dataSource.articleCount == 0;
 }
 
+- (BOOL)collectionViewHidden:(NSError *)error {
+    if (error) {
+        return YES;
+    } else {
+        return NO;
+    }
+}
+
 - (BOOL)errorMessageLabelHidden {
     return YES;
+}
+
+- (BOOL)errorMessageLabelHidden:(NSError *)error {
+    if (error) {
+        return NO;
+    } else {
+        return YES;
+    }
+}
+
+- (NSString *)errorMessageLabelText:(NSError *)error {
+    return error.description;
 }
 
 - (NSUInteger)itemCount {
@@ -46,6 +77,10 @@
         return [[CCBRNewsCardViewModel alloc] initWithModel:article];
     }
     return nil;
+}
+
+- (void)goToSettingScreen {
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]  options:@{} completionHandler:nil];
 }
 
 @end

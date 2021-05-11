@@ -12,6 +12,8 @@
 #import "CCBRNewsMediumCardView.h"
 #import "CCBRNewsSmallCardView.h"
 #import "CCBRCommands.h"
+#import "CCBREventLogger.h"
+#import "CCBRNewsCardViewModel.h"
 
 typedef enum : NSUInteger {
     NewsV2CardTypeBig,
@@ -53,6 +55,12 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
                 [weakSelf updateUI];
             });
         };
+        
+        self.viewModel.updateErrorCallback = ^(NSError * _Nonnull error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf updateErrorUI:error];
+            });
+        };
     }
     return self;
 }
@@ -88,6 +96,12 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
     [self.collectionView reloadData];
 }
 
+- (void)updateErrorUI:(NSError *)error {
+    self.collectionView.hidden = [self.viewModel collectionViewHidden:error];
+    self.errorMessageLabel.hidden = [self.viewModel errorMessageLabelHidden:error];
+    self.errorMessageLabel.text = [self.viewModel errorMessageLabelText:error];
+}
+
 /*
  #pragma mark - Navigation
  
@@ -115,16 +129,20 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
     if (self.cardType == NewsV2CardTypeSmall) {
         CCBRNewsSmallCardView *smallCardView = (CCBRNewsSmallCardView *)[collectionView dequeueReusableCellWithReuseIdentifier:kCCBRNewsSmallCardView forIndexPath:indexPath];
         CCBRNewsCardViewModel *itemViewModel = [self.viewModel itemViewModelAtIndex:indexPath.row];
+        [[CCBREventLogger shared] logCardImpression:itemViewModel.articleId];
         smallCardView.viewModel = itemViewModel;
         cell = smallCardView;
     } else if (self.cardType == NewsV2CardTypeMedium) {
         CCBRNewsMediumCardView *mediumCardView = (CCBRNewsMediumCardView *)[collectionView dequeueReusableCellWithReuseIdentifier:kCCBRNewsMediumCardView forIndexPath:indexPath];
         CCBRNewsCardViewModel *itemViewModel = [self.viewModel itemViewModelAtIndex:indexPath.row];
+        [[CCBREventLogger shared] logCardImpression:itemViewModel.articleId];
         mediumCardView.viewModel = itemViewModel;
         cell = mediumCardView;
+        
     } else if (self.cardType == NewsV2CardTypeBig) {
         CCBRNewsBigCardView *bigCardView = (CCBRNewsBigCardView *)[collectionView dequeueReusableCellWithReuseIdentifier:kCCBRNewsBigCardView forIndexPath:indexPath];
         CCBRNewsCardViewModel *itemViewModel = [self.viewModel itemViewModelAtIndex:indexPath.row];
+        [[CCBREventLogger shared] logCardImpression:itemViewModel.articleId];
         bigCardView.viewModel = itemViewModel;
         cell = bigCardView;
     }
@@ -165,6 +183,8 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
 
 - (void)collectionView:(UICollectionView *)collectionView
 didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    CCBRNewsCardViewModel * item = [self.viewModel itemViewModelAtIndex:indexPath.row];
+    [[CCBREventLogger shared] logCardClick:item.articleId];
     [self.dispatcher showNewsWithDataSource:self.viewModel.dataSource
                                  startIndex:indexPath.row];
 }
@@ -185,11 +205,17 @@ didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     return CGSizeMake(itemWidth, itemHeight);
 }
 
+- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
+    [self.viewModel loadMoreArticlesAtIndex:indexPath.row];
+}
+
 #pragma mark - Event Handlers
 
 - (IBAction)didTapButton:(UIButton *)sender {
     if (sender == self.settingsButton) {
-        // TODO: Show Settings screen
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.viewModel goToSettingScreen];
+        });
     }
 }
 

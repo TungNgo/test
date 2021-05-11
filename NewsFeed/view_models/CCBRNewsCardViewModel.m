@@ -70,4 +70,12 @@
     return self.model.desc;
 }
 
+- (NSString *)articleId {
+    if (self.model.newsFeedId != nil) {
+        return self.model.newsFeedId;
+    } else {
+        return @"ID does not exist";
+    }
+}
+
 @end
