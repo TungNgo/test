@@ -95,7 +95,7 @@ NSURL *GetBaseURL(NSURL *URL) {
 - (void)updateUI {
     self.titleLabel.text = self.viewModel.title;
     self.domainLabel.text = self.viewModel.domain;
-//    self.faviconView.image = self.viewModel.favicon;
+    self.faviconView.image = self.viewModel.favicon;
 }
 
 - (void)buildWebView {

@@ -6,6 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "CCBRNewsDataStore.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -16,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic, weak) id<CCBRArticleDataSource> dataSource;
 @property(nonatomic, copy) void (^updateCallback)(void);
+@property(nonatomic) NSUInteger endIndex;
 
 - (instancetype)initWithDataSource:(id<CCBRArticleDataSource>)dataSource;
 
@@ -23,6 +25,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)errorMessageLabelHidden;
 - (NSUInteger)itemCount;
 - (CCBRNewsCardViewModel *)itemViewModelAtIndex:(NSUInteger)index;
+- (void)loadMoreIfNeededWithCurrentIndex:(NSUInteger)index;
+- (void)logImpresstionEventForItemAtIndex:(NSUInteger)index;
+- (void)logClickEventForItemAtIndex:(NSUInteger)index;
 
 @end
 

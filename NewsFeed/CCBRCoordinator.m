@@ -10,6 +10,7 @@
 #import "CCBRNewsPageViewModel.h"
 #import "CCBRNewsPageViewController.h"
 #import "CCBRNewsDataStore.h"
+#import "CCBRSettingViewController.h"
 
 @interface CCBRCoordinator ()
 
@@ -39,6 +40,12 @@
 
 - (void)hideNews {
     [self.baseViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)showSettings {
+    CCBRSettingViewController * settingVC = [[CCBRSettingViewController alloc] init];
+    UINavigationController * settingNC = [[UINavigationController alloc]initWithRootViewController:settingVC];
+    [self.baseViewController presentViewController:settingNC animated:YES completion:nil];
 }
 
 @end

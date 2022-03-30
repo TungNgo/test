@@ -12,6 +12,8 @@
 #import "CCBRNewsMediumCardView.h"
 #import "CCBRNewsSmallCardView.h"
 #import "CCBRCommands.h"
+#import "CCBREventLogger.h"
+#import "CCBRNewsArticleModel.h"
 
 typedef enum : NSUInteger {
     NewsV2CardTypeBig,
@@ -167,6 +169,12 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
 didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     [self.dispatcher showNewsWithDataSource:self.viewModel.dataSource
                                  startIndex:indexPath.row];
+    [self.viewModel logClickEventForItemAtIndex:indexPath.row];
+}
+
+- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
+    [self.viewModel logImpresstionEventForItemAtIndex:indexPath.row];
+    [self.viewModel loadMoreIfNeededWithCurrentIndex:indexPath.row];
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -189,7 +197,7 @@ didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
 
 - (IBAction)didTapButton:(UIButton *)sender {
     if (sender == self.settingsButton) {
-        // TODO: Show Settings screen
+        [self.dispatcher showSettings];
     }
 }
 
