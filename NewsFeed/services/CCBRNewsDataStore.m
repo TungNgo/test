@@ -23,7 +23,6 @@ NSUInteger const pageSize = 30;
 @end
 
 @implementation CCBRNewsDataStore
-@synthesize error;
 
 - (void)start {
     self.articles = [[NSMutableArray alloc] init];
@@ -43,21 +42,16 @@ NSUInteger const pageSize = 30;
         self.loading = NO;
         
         if (error) {
-            // TODO: Handle error
-            self.error = error;
-            if (self.nextArticlesCallback) {
-                self.nextArticlesCallback(0, 0);
+            if (self.errorCallback) {
+                self.errorCallback(error);
             }
         } else {
             CCBRNewsRestResponse *response = [[CCBRNewsRestResponse alloc] initWithData:data error:&error];
             if (error) {
-                // TODO: Handle error
-                self.error = error;
-                if (self.nextArticlesCallback) {
-                    self.nextArticlesCallback(0, 0);
+                if (self.errorCallback) {
+                    self.errorCallback(error);
                 }
             } else {
-                self.error = NULL;
                 self.page = response.nextPage.integerValue;
                 NSUInteger startIndex = self.articles.count;
                 NSUInteger endIndex = startIndex + response.news.count - 1;

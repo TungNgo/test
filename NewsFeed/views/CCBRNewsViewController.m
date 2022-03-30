@@ -87,7 +87,6 @@ static NSString * const kCCBRNewsSmallCardView = @"CCBRNewsSmallCardView";
 - (void)updateUI {
     self.collectionView.hidden = self.viewModel.collectionViewHidden;
     self.errorMessageLabel.hidden = self.viewModel.errorMessageLabelHidden;
-    self.collectionView.hidden = !(self.errorMessageLabel.hidden);
     [self.collectionView reloadData];
 }
 
@@ -175,10 +174,7 @@ didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
 
 - (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
     [self.viewModel logImpresstionEventForItemAtIndex:indexPath.row];
-    
-    if (self.viewModel.endIndex == (indexPath.row)) {
-        [self.viewModel loadMore];
-    }
+    [self.viewModel loadMoreIfNeededWithCurrentIndex:indexPath.row];
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -201,15 +197,7 @@ didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
 
 - (IBAction)didTapButton:(UIButton *)sender {
     if (sender == self.settingsButton) {
-        // TODO: Show Settings screen
-        CCBRSettingViewController * settingVC = [[CCBRSettingViewController alloc] init];
-        
-//        settingVC.modalPresentationStyle = UIModalPresentationFormSheet;
-        
-        UINavigationController * settingNC = [[UINavigationController alloc]initWithRootViewController:settingVC];
-        
-//        settingNC.navigationController.editButtonItem = closeButton;
-        [self presentViewController:settingNC animated:YES completion:nil];
+        [self.dispatcher showSettings];
     }
 }
 
